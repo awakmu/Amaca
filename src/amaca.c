@@ -42,11 +42,6 @@
 
 static int lua_print(lua_State *l);
 
-static char *replace (
-	const char *src, const char *str,
-	const char *start, const char *end
-);
-
 char *Amaca_template(char *template);
 char *Amaca_template_file(char *filename);
 
@@ -83,7 +78,26 @@ char *Amaca_template(char *template) {
 
 		lua_settop(l, 0);
 
-		result = replace(index, output, start, end);
+		{
+			char *current;
+
+			size_t src_len = strlen(index);
+			size_t str_len = strlen(output);
+			size_t sub_len = end - start;
+
+			result = (char *) malloc((src_len - sub_len) + str_len + 1);
+
+			current = result;
+
+			strncpy(current, index, start - index);
+			current += start - index;
+
+			strncpy(current, output, str_len);
+			current += str_len;
+
+			strncpy(current, end, (index + src_len) - end);
+		}
+
 		index  = result;
 	}
 
@@ -103,28 +117,6 @@ char *Amaca_template_file(char *filename) {
 	fread(str, sizeof(char), fd_size, fd);
 
 	return Amaca_template(str);
-}
-
-static char *replace (const char *src, const char *str, const char *start, const char *end) {
-	char *result, *current;
-
-	size_t src_len = strlen(src);
-	size_t str_len = strlen(str);
-	size_t sub_len = end - start;
-
-	result = (char *) malloc((src_len - sub_len) + str_len + 1);
-
-	current = result;
-
-	strncpy(current, src, start - src);
-	current += start - src;
-
-	strncpy(current, str, str_len);
-	current += str_len;
-
-	strncpy(current, end, (src + src_len) - end);
-
-	return result;
 }
 
 static int lua_print(lua_State *l) {
