@@ -43,15 +43,55 @@
 #define check_value(x) if (x == NULL) { return NULL; }
 
 static int lua_print(lua_State *l);
+static char *eval_template(char *template, va_list args);
 
-char *Amaca_template(char *template);
-char *Amaca_template_file(char *filename);
+char *Amaca_template(char *template, ...);
+char *Amaca_template_file(char *filename, ...);
 
-char *Amaca_template(char *template) {
+char *Amaca_template(char *template, ...) {
+	char *ret;
+	va_list args;
+
+	va_start(args, template);
+	ret = eval_template(template, args);
+	va_end(args);
+
+	return ret;
+}
+
+char *Amaca_template_file(char *filename, ...) {
+	char *str, *ret;
+	va_list args;
+	size_t fd_size;
+	FILE *fd = fopen(filename, "rb");
+
+	if (fd == NULL) {
+		return NULL;
+	}
+
+	fseek(fd, 0, SEEK_END);
+	fd_size = ftell(fd);
+	fseek(fd, 0, SEEK_SET);
+
+	str = (char *) malloc(fd_size + 1);
+	check_value(str);
+
+	fread(str, sizeof(char), fd_size, fd);
+
+	va_start(args, filename);
+	ret = eval_template(str, args);
+	va_end(args);
+
+	return ret;
+}
+
+char *eval_template(char *template, va_list args) {
 	char *result = NULL;
 	char *index = template;
 
 	while (index) {
+		va_list args_copy;
+		char *key, *val;
 		int tmp, token_len;
 		const char *tmpl_state, *start, *end, *token;
 
@@ -75,6 +115,20 @@ char *Amaca_template(char *template) {
 
 		lua_pushstring(l, "");
 		lua_setglobal(l, TMPL_VAR);
+
+		va_copy(args_copy, args);
+
+		while ((key = va_arg(args_copy, char *)) != 0) {
+			val = va_arg(args_copy, char *);
+
+			if (val == NULL)
+				break;
+
+			lua_pushstring(l, val);
+			lua_setglobal(l, key);
+		}
+
+		va_end(args_copy);
 
 		tmp = luaL_dostring(l, token);
 
@@ -110,27 +164,6 @@ char *Amaca_template(char *template) {
 	}
 
 	return result;
-}
-
-char *Amaca_template_file(char *filename) {
-	char *str;
-	size_t fd_size;
-	FILE *fd = fopen(filename, "rb");
-
-	if (fd == NULL) {
-		return NULL;
-	}
-
-	fseek(fd, 0, SEEK_END);
-	fd_size = ftell(fd);
-	fseek(fd, 0, SEEK_SET);
-
-	str = (char *) malloc(fd_size + 1);
-	check_value(str);
-
-	fread(str, sizeof(char), fd_size, fd);
-
-	return Amaca_template(str);
 }
 
 static int lua_print(lua_State *l) {

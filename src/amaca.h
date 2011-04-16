@@ -36,7 +36,7 @@
  *
  */
 
-extern char *Amaca_template(char *template);
+extern char *Amaca_template(char *template, ...);
 
 /**
  * Amaca_template_file - parse and eval a given template file
@@ -47,4 +47,4 @@ extern char *Amaca_template(char *template);
  *
  */
 
-extern char *Amaca_template_file(char *filename);
+extern char *Amaca_template_file(char *filename, ...);

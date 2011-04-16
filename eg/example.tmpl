@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 
 <head>
-	<title>{{ _print('The title') }}</title>
+	<title>{{ _print(title) }}</title>
 </head>
 
 <body>
-	<h1>The body</h1>
+	<h1>{{ _print(body) }}</h1>
 	{{
 		for i = 10, 1, -1 do
-			_print('\n\t\t<p>' .. i .. '</p>\n')
+			_print('\n\t\t<p>Number ' .. i .. '</p>\n')
 		end
 	}}
 </body>
