@@ -161,13 +161,10 @@ static int lua_print(lua_State *l) {
 
 	lua_getglobal(l, TMPL_VAR);
 	tmpl_state = lua_tostring(l, -1);
-	check_value(tmpl_state);
 
 	result = (char *) realloc(result, strlen(tmpl_state) + strlen(result) + 1);
-	check_value(result);
 
-	result = strcat((char *) tmpl_state, result);
-	check_value(result);
+	result = strcat((char *)tmpl_state, result);
 
 	lua_pushstring(l, result);
 	lua_setglobal(l, TMPL_VAR);
