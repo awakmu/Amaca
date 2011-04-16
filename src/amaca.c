@@ -37,7 +37,7 @@
 
 #define TMPL_START "{{"
 #define TMPL_END   "}}"
-#define TMPL_VAR   "__Amaca_output__"
+#define TMPL_VAR   "__Amaca_tmpl_state__"
 #define TMPL_PRINT "_print"
 
 #define check_value(x) if (x == NULL) { return NULL; }
@@ -53,7 +53,7 @@ char *Amaca_template(char *template) {
 
 	while (index) {
 		int tmp, token_len;
-		const char *output, *start, *end, *token;
+		const char *tmpl_state, *start, *end, *token;
 
 		start = strstr(index, TMPL_START);
 
@@ -79,7 +79,7 @@ char *Amaca_template(char *template) {
 		tmp = luaL_dostring(l, token);
 
 		lua_getglobal(l, TMPL_VAR);
-		output = lua_tostring(l, -1);
+		tmpl_state = lua_tostring(l, -1);
 
 		lua_settop(l, 0);
 
@@ -87,7 +87,7 @@ char *Amaca_template(char *template) {
 			char *current;
 
 			size_t src_len = strlen(index);
-			size_t str_len = strlen(output);
+			size_t str_len = strlen(tmpl_state);
 			size_t sub_len = end - start;
 
 			result = (char *) malloc((src_len - sub_len) + str_len + 1);
@@ -98,7 +98,7 @@ char *Amaca_template(char *template) {
 			check_value(current);
 			current += start - index;
 
-			current = strncpy(current, output, str_len);
+			current = strncpy(current, tmpl_state, str_len);
 			check_value(current);
 			current += str_len;
 
@@ -134,7 +134,7 @@ char *Amaca_template_file(char *filename) {
 }
 
 static int lua_print(lua_State *l) {
-	const char *output;
+	const char *tmpl_state;
 	char *result = NULL;
 	int i, args = lua_gettop(l);
 
@@ -160,13 +160,13 @@ static int lua_print(lua_State *l) {
 	}
 
 	lua_getglobal(l, TMPL_VAR);
-	output = lua_tostring(l, -1);
-	check_value(output);
+	tmpl_state = lua_tostring(l, -1);
+	check_value(tmpl_state);
 
-	result = (char *) realloc(result, strlen(output) + strlen(result) + 1);
+	result = (char *) realloc(result, strlen(tmpl_state) + strlen(result) + 1);
 	check_value(result);
 
-	result = strcat((char *) output, result);
+	result = strcat((char *) tmpl_state, result);
 	check_value(result);
 
 	lua_pushstring(l, result);
