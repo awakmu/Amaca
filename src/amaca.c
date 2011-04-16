@@ -38,7 +38,7 @@
 #define TMPL_START "{{"
 #define TMPL_END   "}}"
 #define TMPL_VAR   "__Amaca_tmpl_state__"
-#define TMPL_PRINT "_print"
+#define TMPL_PRINT "print"
 
 #define check_value(x) if (x == NULL) return NULL;
 
