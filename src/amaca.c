@@ -40,6 +40,8 @@
 #define TMPL_VAR   "__Amaca_output__"
 #define TMPL_PRINT "_print"
 
+#define check_value(x) if (x == NULL) { return NULL; }
+
 static int lua_print(lua_State *l);
 
 char *Amaca_template(char *template);
@@ -62,16 +64,10 @@ char *Amaca_template(char *template) {
 
 		token_len = (end - 2) - (start + 2);
 		token = (char *) malloc(token_len + 1);
-
-		if (token == NULL) {
-			return NULL;
-		}
+		check_value(token);
 
 		token = memcpy((char *) token, start + 2, token_len);
-
-		if (token == NULL) {
-			return NULL;
-		}
+		check_value(token);
 
 		lua_State *l = luaL_newstate();
 		luaL_openlibs(l);
@@ -95,34 +91,19 @@ char *Amaca_template(char *template) {
 			size_t sub_len = end - start;
 
 			result = (char *) malloc((src_len - sub_len) + str_len + 1);
-
-			if (result == NULL) {
-				return NULL;
-			}
-
+			check_value(result);
 			current = result;
 
 			current = strncpy(current, index, start - index);
-
-			if (current == NULL) {
-				return NULL;
-			}
-
+			check_value(current);
 			current += start - index;
 
 			current = strncpy(current, output, str_len);
-
-			if (current == NULL) {
-				return NULL;
-			}
-
+			check_value(current);
 			current += str_len;
 
 			current = strncpy(current, end, (index + src_len) - end);
-
-			if (current == NULL) {
-				return NULL;
-			}
+			check_value(current);
 		}
 
 		index  = result;
@@ -145,10 +126,7 @@ char *Amaca_template_file(char *filename) {
 	fseek(fd, 0, SEEK_SET);
 
 	str = (char *) malloc(fd_size + 1);
-
-	if (str == NULL) {
-		return NULL;
-	}
+	check_value(str);
 
 	fread(str, sizeof(char), fd_size, fd);
 
@@ -183,9 +161,13 @@ static int lua_print(lua_State *l) {
 
 	lua_getglobal(l, TMPL_VAR);
 	output = lua_tostring(l, -1);
+	check_value(output);
 
 	result = (char *) realloc(result, strlen(output) + strlen(result) + 1);
+	check_value(result);
+
 	result = strcat((char *) output, result);
+	check_value(result);
 
 	lua_pushstring(l, result);
 	lua_setglobal(l, TMPL_VAR);
