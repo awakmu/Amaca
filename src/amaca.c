@@ -62,7 +62,16 @@ char *Amaca_template(char *template) {
 
 		token_len = (end - 2) - (start + 2);
 		token = (char *) malloc(token_len + 1);
-		memcpy((char *) token, start + 2, token_len);
+
+		if (token == NULL) {
+			return NULL;
+		}
+
+		token = memcpy((char *) token, start + 2, token_len);
+
+		if (token == NULL) {
+			return NULL;
+		}
 
 		lua_State *l = luaL_newstate();
 		luaL_openlibs(l);
@@ -87,15 +96,33 @@ char *Amaca_template(char *template) {
 
 			result = (char *) malloc((src_len - sub_len) + str_len + 1);
 
+			if (result == NULL) {
+				return NULL;
+			}
+
 			current = result;
 
-			strncpy(current, index, start - index);
+			current = strncpy(current, index, start - index);
+
+			if (current == NULL) {
+				return NULL;
+			}
+
 			current += start - index;
 
-			strncpy(current, output, str_len);
+			current = strncpy(current, output, str_len);
+
+			if (current == NULL) {
+				return NULL;
+			}
+
 			current += str_len;
 
-			strncpy(current, end, (index + src_len) - end);
+			current = strncpy(current, end, (index + src_len) - end);
+
+			if (current == NULL) {
+				return NULL;
+			}
 		}
 
 		index  = result;
@@ -109,11 +136,20 @@ char *Amaca_template_file(char *filename) {
 	size_t fd_size;
 	FILE *fd = fopen(filename, "rb");
 
+	if (fd == NULL) {
+		return NULL;
+	}
+
 	fseek(fd, 0, SEEK_END);
 	fd_size = ftell(fd);
 	fseek(fd, 0, SEEK_SET);
 
 	str = (char *) malloc(fd_size + 1);
+
+	if (str == NULL) {
+		return NULL;
+	}
+
 	fread(str, sizeof(char), fd_size, fd);
 
 	return Amaca_template(str);
