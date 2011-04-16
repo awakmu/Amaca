@@ -29,10 +29,21 @@
 
 /**
  * Amaca_template - parse and eval a given template string
- * @template: template string
+ * @param template Template string
+ * @param ... List of key-value pairs to pass to the template
  *
  * This function parses and evaluates the given template string, and returns
- * a pointer to the resulting string.
+ * a pointer to the resulting string (returns NULL on failure). It also
+ * optionally takes a list of key-value pairs that are passed to the template
+ * as Lua variables.
+ *
+ * Example:
+ *
+ *   char *result = Amaca_template(
+ *       template_string,
+ *       "my_var1", "Var1 content",
+ *       "my_var2", "Var2 content"
+ * );
  *
  */
 
@@ -40,10 +51,20 @@ extern char *Amaca_template(char *template, ...);
 
 /**
  * Amaca_template_file - parse and eval a given template file
- * @filename: template filename
+ * @param filename Template filename
+ * @param ... List of key-value pairs to pass to the template
  *
  * Just like Amaca_template() but takes as argument a template file instead
- * of a string.
+ * of a string. It also optionally takes a list of key-value pairs that are
+ * passed to the template as Lua variables.
+ *
+ * Example:
+ *
+ *   char *result = Amaca_template(
+ *       "/path/to/file.tmpl",
+ *       "my_var1", "Var1 content",
+ *       "my_var2", "Var2 content"
+ * );
  *
  */
 
