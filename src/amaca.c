@@ -40,18 +40,19 @@
 #define TMPL_VAR   "__Amaca_tmpl_state__"
 #define TMPL_PRINT "_print"
 
-#define check_value(x) if (x == NULL) { return NULL; }
-
-static int lua_print(lua_State *l);
-static char *eval_template(char *template, va_list args);
+#define check_value(x) if (x == NULL) return NULL;
 
 char *Amaca_template(char *template, ...);
 char *Amaca_template_file(char *filename, ...);
+
+static int lua_print(lua_State *l);
+static char *eval_template(char *template, va_list args);
 
 char *Amaca_template(char *template, ...) {
 	char *ret;
 	va_list args;
 
+	/* eval template with proper args */
 	va_start(args, template);
 	ret = eval_template(template, args);
 	va_end(args);
@@ -64,11 +65,9 @@ char *Amaca_template_file(char *filename, ...) {
 	va_list args;
 	size_t fd_size;
 	FILE *fd = fopen(filename, "rb");
+	check_value(fd);
 
-	if (fd == NULL) {
-		return NULL;
-	}
-
+	/* read template file to memory */
 	fseek(fd, 0, SEEK_END);
 	fd_size = ftell(fd);
 	fseek(fd, 0, SEEK_SET);
@@ -78,6 +77,7 @@ char *Amaca_template_file(char *filename, ...) {
 
 	fread(str, sizeof(char), fd_size, fd);
 
+	/* eval template with proper args */
 	va_start(args, filename);
 	ret = eval_template(str, args);
 	va_end(args);
@@ -86,6 +86,7 @@ char *Amaca_template_file(char *filename, ...) {
 }
 
 char *eval_template(char *template, va_list args) {
+	lua_State *l;
 	char *result = NULL;
 	char *index = template;
 
@@ -95,6 +96,7 @@ char *eval_template(char *template, va_list args) {
 		int tmp, token_len;
 		const char *tmpl_state, *start, *end, *token;
 
+		/* extract block of code */
 		start = strstr(index, TMPL_START);
 
 		if (start == NULL)
@@ -109,13 +111,15 @@ char *eval_template(char *template, va_list args) {
 		token = memcpy((char *) token, start + 2, token_len);
 		check_value(token);
 
-		lua_State *l = luaL_newstate();
+		/* initialize lua state */
+		l = luaL_newstate();
 		luaL_openlibs(l);
 		lua_register(l, TMPL_PRINT, lua_print);
 
 		lua_pushstring(l, "");
 		lua_setglobal(l, TMPL_VAR);
 
+		/* pass arguments to lua */
 		va_copy(args_copy, args);
 
 		while ((key = va_arg(args_copy, char *)) != 0) {
@@ -130,13 +134,16 @@ char *eval_template(char *template, va_list args) {
 
 		va_end(args_copy);
 
+		/* execute code block */
 		tmp = luaL_dostring(l, token);
 
+		/* extract code block result */
 		lua_getglobal(l, TMPL_VAR);
 		tmpl_state = lua_tostring(l, -1);
 
 		lua_settop(l, 0);
 
+		/* replace code block with its result */
 		{
 			char *current;
 
@@ -173,6 +180,7 @@ static int lua_print(lua_State *l) {
 
 	lua_getglobal(l, "tostring");
 
+	/* merge print arguments in a single buffer */
 	for(i = 1; i <= args; i++) {
 		const char *s;
 
@@ -192,6 +200,7 @@ static int lua_print(lua_State *l) {
 		lua_pop(l, 1);
 	}
 
+	/* update lua result varible */
 	lua_getglobal(l, TMPL_VAR);
 	tmpl_state = lua_tostring(l, -1);
 
