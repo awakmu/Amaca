@@ -1,22 +1,25 @@
+# Amaca Makefile
+# Copyright (C) 2011 Alessandro Ghedini <al3xbio@gmail.com>
+# This file is released under the BSD license, see the COPYING file
+
 CFLAGS=-Wall -I/usr/include -I/usr/include/lua5.1 -O3 -fomit-frame-pointer -fPIC
-LDFLAGS=-L/usr/lib -llua5.1 -g
+LDFLAGS=-L/usr/lib -L. -llua5.1 -g
 
-all: example shared
+DYLIB=libamaca.so
 
-shared: src/amaca.o
-	$(CC) -shared -fPIC -o libamaca.so src/amaca.o $(CFLAGS) $(LDFLAGS)
+all: example $(DYLIB)
+
+$(DYLIB): src/amaca.o
+	$(CC) -shared -fPIC -o $(DYLIB) src/amaca.o $(CFLAGS) $(LDFLAGS)
 
 example: eg/example.o src/amaca.o
 	$(CC) -o example eg/example.o src/amaca.o $(CFLAGS) $(LDFLAGS)
 
-example-shared:
-	$(CC) -o example eg/example.o -L. -lamaca $(CFLAGS) $(LDFLAGS)
+example-shared: eg/example.o $(DYLIB)
+	$(CC) -o example eg/example.o $(CFLAGS) $(LDFLAGS) -lamaca
 
 src/amaca.o: src/amaca.c
-	$(CC) -c -o src/amaca.o src/amaca.c $(CFLAGS)
-
-eg/example.o: eg/example.c src/amaca.h
-	$(CC) -c -o eg/example.o eg/example.c $(CFLAGS)
+eg/example.o: eg/example.c eg/../src/amaca.h
 
 clean:
 	$(RM) -rf example eg/*.o src/*.o *.so
