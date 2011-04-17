@@ -2,10 +2,11 @@
 # Copyright (C) 2011 Alessandro Ghedini <al3xbio@gmail.com>
 # This file is released under the BSD license, see the COPYING file
 
-CFLAGS=-Wall -I/usr/include -I/usr/include/lua5.1 -O3 -fomit-frame-pointer -fPIC
-LDFLAGS=-L/usr/lib -L. -llua5.1 -g
+OPTI?=-O3 -fomit-frame-pointer
+CFLAGS?=-Wall -pedantic -I/usr/include/lua5.1 $(OPTI) -fPIC
+LDFLAGS?=-L. -llua5.1
 
-DYLIB=libamaca.so
+DYLIB?=libamaca.so
 
 all: example $(DYLIB)
 
