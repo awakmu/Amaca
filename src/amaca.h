@@ -1,5 +1,5 @@
 /*
- * Lazy C template engine supporting Lua scripting
+ * C template engine supporting Lua
  *
  * Copyright (c) 2011, Alessandro Ghedini <al3xbio@gmail.com>
  * All rights reserved.
