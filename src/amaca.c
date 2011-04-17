@@ -47,6 +47,7 @@ char *Amaca_template_file(char *filename, ...);
 
 static int lua_print(lua_State *l);
 static char *eval_template(char *template, va_list args);
+static char *str_replace(char *orig, char *str, char *start, char *end);
 
 char *Amaca_template(char *template, ...) {
 	char *ret;
@@ -87,14 +88,13 @@ char *Amaca_template_file(char *filename, ...) {
 
 char *eval_template(char *template, va_list args) {
 	lua_State *l;
-	char *result = NULL;
 	char *index = template;
 
 	while (index) {
 		va_list args_copy;
 		char *key, *val;
 		int tmp, token_len;
-		const char *tmpl_state, *start, *end, *token;
+		char *tmpl_state, *start, *end, *token;
 
 		/* extract block of code */
 		start = strstr(index, TMPL_START);
@@ -139,36 +139,39 @@ char *eval_template(char *template, va_list args) {
 
 		/* extract code block result */
 		lua_getglobal(l, TMPL_VAR);
-		tmpl_state = lua_tostring(l, -1);
+		tmpl_state = (char *) lua_tostring(l, -1);
 
 		lua_settop(l, 0);
 
 		/* replace code block with its result */
-		{
-			char *current;
-
-			size_t src_len = strlen(index);
-			size_t str_len = strlen(tmpl_state);
-			size_t sub_len = end - start;
-
-			result = (char *) malloc((src_len - sub_len) + str_len + 1);
-			check_value(result);
-			current = result;
-
-			current = strncpy(current, index, start - index);
-			check_value(current);
-			current += start - index;
-
-			current = strncpy(current, tmpl_state, str_len);
-			check_value(current);
-			current += str_len;
-
-			current = strncpy(current, end, (index + src_len) - end);
-			check_value(current);
-		}
-
-		index  = result;
+		index  = str_replace(index, tmpl_state, start, end);
 	}
+
+	return index;
+}
+
+static char *str_replace(char *orig, char *str, char *start, char *end) {
+	char *result = NULL;
+	char *current;
+
+	size_t src_len = strlen(orig);
+	size_t str_len = strlen(str);
+	size_t sub_len = end - start;
+
+	result = (char *) malloc((src_len - sub_len) + str_len + 1);
+	check_value(result);
+	current = result;
+
+	current = strncpy(current, orig, start - orig);
+	check_value(current);
+	current += start - orig;
+
+	current = strncpy(current, str, str_len);
+	check_value(current);
+	current += str_len;
+
+	current = strncpy(current, end, (orig + src_len) - end);
+	check_value(current);
 
 	return result;
 }
