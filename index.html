@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Amaca -- C template engine supporting Lua</title>
+  <style>
+    body {
+      font-size:24px;
+      line-height:1.5;
+      color:#333;
+    }
+    div#index {
+      width:28em;
+      margin:0 auto;
+    }
+    a, a:visited { color:#333; text-decoration: none; }
+    a:hover { color:#777; text-decoration: none; }
+    h1,h2,h3,body { font-family:'gill sans','dejavu sans',verdana,sans-serif; }
+    tt,.aux,.man-ref,pre,h1 { font-family:menlo,'dejavu sans mono',monospace; }
+
+    h1 {
+      font-weight:bold;
+      font-size:80px;
+      letter-spacing:-5px;
+      color:#000;
+      margin-bottom:0;
+      position:relative;
+      left:-50px;
+    }
+    h1 b {
+      color:#ccc;
+    }
+    h3 {
+      font-weight:normal;
+      color:#777;
+      margin-top:-20px;
+      margin-bottom:40px;
+      letter-spacing:2px;
+    }
+    h4 {
+      font-size:26px;
+      color:#111;
+      margin-bottom:0;
+    }
+    h4+p, h4+dl { margin-top:10px }
+    pre {
+      margin-left:15px;
+      color:#666;
+      font-size:12px;
+    }
+    tt,code { font-size:0.75em; }
+    .aux     { font-size:20px;letter-spacing:1px }
+    .also    { font-size:18px }
+    .copy    {
+      font-size:18px;
+      text-align:right;
+      color:#777;
+      margin-top:50px;
+      padding-top:5px;
+      border-top:1px solid #aaa;
+    }
+    .man-ref { letter-spacing:-1px; }
+    .copyright { font-size:18px; }
+    .caption { text-align: center; font-size: 80% }
+  </style>
+</head>
+<body>
+<div id='index'>
+  <h1><b>|</b>Amaca</h1>
+  <h3>C template engine supporting Lua</h3>
+
+  <p class='aux'>
+    <a href='http://github.com/AlexBio/Amaca#readme'>README</a>,
+    <a href='http://github.com/AlexBio/Amaca/blob/master/COPYING#files'>COPYING</a>
+  </p>
+
+  <h4>Manuals</h4>
+  <dl>
+    <dt>
+      <a class='man-ref' href='https://github.com/AlexBio/Amaca/blob/master/src/amaca.h#files'>Amaca API</a>
+    </dt>
+  </dl>
+
+  <h4>Example</h4>
+  <dl>
+    <dt>
+      <p>Template file (<a href='http://github.com/AlexBio/Amaca/blob/master/eg/example.tmpl#files'>example.tmpl</a>):</p>
+      <pre>
+&lt;!DOCTYPE html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;{{ print(title) }}&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;h1&gt;{{ print(body) }}&lt;/h1&gt;
+    {{
+        for i = 10, 1, -1 do
+            print('\n\t\t&lt;p&gt;Number ' .. i .. '&lt;/p&gt;\n')
+        end
+    }}
+&lt;/body&gt;
+&lt;/html&gt;
+      </pre>
+    </dt>
+    <dt>
+      <p>C code (<a href='http://github.com/AlexBio/Amaca/blob/master/eg/example.c#files'>example.c</a>):</p>
+      <pre>
+#include &lt;stdio.h&gt;
+
+#include "amaca.h"
+
+int main() {
+    char *str = Amaca_template_file(
+        "eg/example.tmpl",
+        "title", "This is a title",
+        "body", "This is the body"
+    );
+
+    printf("%s", str);
+
+    return 0;
+}
+      </pre>
+    </dt>
+  </dl>
+
+  <h4>Support</h4>
+  <ul>
+    <li><a href="http://ghedini.co.cc/Amaca">Homepage</a></li>
+    <li><a href="http://github.com/AlexBio/Amaca">GitHub</a></li>
+  </ul>
+
+  <p class='copy'>
+    Copyright &copy; 2011 <a href="http://ghedini.co.cc">Alessandro Ghedini</a>
+  </p>
+</div>
+</body>
+</html>
