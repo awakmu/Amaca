@@ -4,7 +4,7 @@
     _  ___ |  / / / / / /_/ // /__ / /_/ /
     /_/  |_/_/ /_/ /_/\__,_/ \___/ \__,_/
 
-Amaca (pronounced: amàca) is a simple te,plate engine written in C, which
+Amaca (pronounced: amàca) is a simple template engine written in C, which
 natively supports Lua scripting. This means that you can create your tamplates
 without the need to learn yet another templating language. You'll need just a
 minimal knowledge of the plain and simple Lua.
@@ -37,8 +37,8 @@ Amaca is distributed as source code. Install with:
     $ cd Amaca
     $ make
 
-You can also copy-paste the `amaca.{c,h}` files inside your project and use a
-custom Mkaefile to build it.
+You can also copy-paste the `src/amaca.{c,h}` files inside your project and use
+a custom Makefile to build it.
 
 ## COPYRIGHT
 
