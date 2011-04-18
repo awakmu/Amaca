@@ -37,7 +37,7 @@
 
 #define TMPL_START "{{"
 #define TMPL_END   "}}"
-#define TMPL_VAR   "__Amaca_tmpl_state__"
+#define TMPL_VAR   "__Amaca_tmpl__"
 #define TMPL_PRINT "print"
 
 #define check_value(x) if (x == NULL) return NULL;
@@ -181,7 +181,7 @@ static char *lua_exec(char *code, va_list args) {
 }
 
 static int lua_print(lua_State *l) {
-	const char *tmpl_state;
+	const char *tmpl;
 	char *result = NULL;
 	int i, args = lua_gettop(l);
 
@@ -209,11 +209,11 @@ static int lua_print(lua_State *l) {
 
 	/* update lua result varible */
 	lua_getglobal(l, TMPL_VAR);
-	tmpl_state = lua_tostring(l, -1);
+	tmpl = lua_tostring(l, -1);
 
-	result = (char *) realloc(result, strlen(tmpl_state) + strlen(result) + 1);
+	result = (char *) realloc(result, strlen(tmpl) + strlen(result) + 1);
 
-	result = strcat((char *)tmpl_state, result);
+	result = strcat((char *)tmpl, result);
 
 	lua_pushstring(l, result);
 	lua_setglobal(l, TMPL_VAR);
