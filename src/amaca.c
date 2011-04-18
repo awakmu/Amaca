@@ -1,5 +1,5 @@
 /*
- * C template engine supporting Lua
+ * Template engine Lua-based in C
  *
  * Copyright (c) 2011, Alessandro Ghedini <al3xbio@gmail.com>
  * All rights reserved.
