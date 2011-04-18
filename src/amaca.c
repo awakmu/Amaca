@@ -42,15 +42,15 @@
 
 #define check_value(x) if (x == NULL) return NULL;
 
-char *Amaca_template(char *template, ...);
-char *Amaca_template_file(char *filename, ...);
+char *Amaca_template(const char *template, ...);
+char *Amaca_template_file(const char *filename, ...);
 
 static int   lua_print(lua_State *l);
 static char *lua_exec(char *code, va_list args);
-static char *eval_template(char *template, va_list args);
+static char *eval_template(const char *template, va_list args);
 static char *str_replace(char *orig, char *str, char *start, char *end);
 
-char *Amaca_template(char *template, ...) {
+char *Amaca_template(const char *template, ...) {
 	char *ret;
 	va_list args;
 
@@ -62,7 +62,7 @@ char *Amaca_template(char *template, ...) {
 	return ret;
 }
 
-char *Amaca_template_file(char *filename, ...) {
+char *Amaca_template_file(const char *filename, ...) {
 	char *str, *ret;
 	va_list args;
 	size_t fd_size;
@@ -87,8 +87,8 @@ char *Amaca_template_file(char *filename, ...) {
 	return ret;
 }
 
-char *eval_template(char *template, va_list args) {
-	char *index = template;
+char *eval_template(const char *template, va_list args) {
+	char *index = (char *) template;
 	char *start, *end, *token;
 
 	while ((start = strstr(index, TMPL_START)) != NULL) {
