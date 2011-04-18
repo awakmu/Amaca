@@ -45,7 +45,8 @@
 char *Amaca_template(char *template, ...);
 char *Amaca_template_file(char *filename, ...);
 
-static int lua_print(lua_State *l);
+static int   lua_print(lua_State *l);
+static char *lua_exec(char *code, va_list args);
 static char *eval_template(char *template, va_list args);
 static char *str_replace(char *orig, char *str, char *start, char *end);
 
@@ -111,37 +112,7 @@ char *eval_template(char *template, va_list args) {
 		token = memcpy((char *) token, start + 2, token_len);
 		check_value(token);
 
-		/* initialize lua state */
-		l = luaL_newstate();
-		luaL_openlibs(l);
-		lua_register(l, TMPL_PRINT, lua_print);
-
-		lua_pushstring(l, "");
-		lua_setglobal(l, TMPL_VAR);
-
-		/* pass arguments to lua */
-		va_copy(args_copy, args);
-
-		while ((key = va_arg(args_copy, char *)) != 0) {
-			val = va_arg(args_copy, char *);
-
-			if (val == NULL)
-				break;
-
-			lua_pushstring(l, val);
-			lua_setglobal(l, key);
-		}
-
-		va_end(args_copy);
-
-		/* execute code block */
-		tmp = luaL_dostring(l, token);
-
-		/* extract code block result */
-		lua_getglobal(l, TMPL_VAR);
-		tmpl_state = (char *) lua_tostring(l, -1);
-
-		lua_settop(l, 0);
+		tmpl_state = lua_exec(token, args);
 
 		/* replace code block with its result */
 		index  = str_replace(index, tmpl_state, start, end);
@@ -174,6 +145,46 @@ static char *str_replace(char *orig, char *str, char *start, char *end) {
 	check_value(current);
 
 	return result;
+}
+
+static char *lua_exec(char *code, va_list args) {
+	int tmp;
+	va_list args_copy;
+	char *tmpl, *key, *val;
+
+	/* initialize lua state */
+	lua_State *l = luaL_newstate();
+	luaL_openlibs(l);
+	lua_register(l, TMPL_PRINT, lua_print);
+
+	lua_pushstring(l, "");
+	lua_setglobal(l, TMPL_VAR);
+
+	/* pass arguments to lua */
+	va_copy(args_copy, args);
+
+	while ((key = va_arg(args_copy, char *)) != 0) {
+		val = va_arg(args_copy, char *);
+
+		if (val == NULL)
+			break;
+
+		lua_pushstring(l, val);
+		lua_setglobal(l, key);
+	}
+
+	va_end(args_copy);
+
+	/* execute code block */
+	tmp = luaL_dostring(l, code);
+
+	/* extract code block result */
+	lua_getglobal(l, TMPL_VAR);
+	tmpl = (char *) lua_tostring(l, -1);
+
+	lua_settop(l, 0);
+
+	return tmpl;
 }
 
 static int lua_print(lua_State *l) {
