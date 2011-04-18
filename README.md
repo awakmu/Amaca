@@ -13,12 +13,12 @@ minimal knowledge of the plain and simple Lua.
 
 Amaca consists of just two functions:
 
-    char *Amaca_template(char *template, ...);
+    char *Amaca_template(const char *template, ...);
 
 Which takes as argument a template string and a list of key-value pairs to pass
 to the template code, which will be available within the Lua scripts.
 
-    char *Amaca_template_file(char *filename, ...);
+    char *Amaca_template_file(const char *filename, ...);
 
 It's the same as the previous function, but it takes as argument the path to a
 template file.
