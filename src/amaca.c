@@ -38,7 +38,6 @@
 #define TMPL_START "{{"
 #define TMPL_END   "}}"
 #define TMPL_VAR   "__Amaca_tmpl__"
-#define TMPL_PRINT "print"
 
 #define check_value(x) if (x == NULL) return NULL;
 
@@ -63,13 +62,14 @@ char *Amaca_template(const char *template, ...) {
 }
 
 char *Amaca_template_file(const char *filename, ...) {
-	char *str, *ret;
 	va_list args;
 	size_t fd_size;
+	char *str, *ret;
+
 	FILE *fd = fopen(filename, "rb");
 	check_value(fd);
 
-	/* read template file to memory */
+	/* read template file into memory */
 	fseek(fd, 0, SEEK_END);
 	fd_size = ftell(fd);
 	fseek(fd, 0, SEEK_SET);
@@ -78,6 +78,8 @@ char *Amaca_template_file(const char *filename, ...) {
 	check_value(str);
 
 	fread(str, sizeof(char), fd_size, fd);
+
+	fclose(fd);
 
 	/* eval template with proper args */
 	va_start(args, filename);
@@ -88,27 +90,27 @@ char *Amaca_template_file(const char *filename, ...) {
 }
 
 char *eval_template(const char *template, va_list args) {
+	char *start, *end;
 	char *index = (char *) template;
-	char *start, *end, *token;
 
 	while ((start = strstr(index, TMPL_START)) != NULL) {
-		int token_len;
-		char *tmpl;
+		size_t block_len;
+		char *tmpl, *block;
 
 		/* extract block of code */
-		end   = strstr(start, TMPL_END)+2;
+		end = strstr(start, TMPL_END)+2;
 
-		token_len = (end - 2) - (start + 2);
-		token = (char *) malloc(token_len + 1);
-		check_value(token);
+		block_len = (end - 2) - (start + 2);
+		block = (char *) malloc(block_len + 1);
+		check_value(block);
 
-		token = memcpy((char *) token, start + 2, token_len);
-		check_value(token);
+		block = memcpy((char *) block, start + 2, block_len);
+		check_value(block);
 
-		tmpl = lua_exec(token, args);
+		tmpl = lua_exec(block, args);
 
-		/* replace code block with its result */
-		index  = str_replace(index, tmpl, start, end);
+		/* replace code block with its output */
+		index = str_replace(index, tmpl, start, end);
 	}
 
 	return index;
@@ -148,19 +150,29 @@ static char *lua_exec(char *code, va_list args) {
 	/* initialize lua state */
 	lua_State *l = luaL_newstate();
 	luaL_openlibs(l);
-	lua_register(l, TMPL_PRINT, lua_print);
+
+	/* override built-in lua "print()" function */
+	lua_register(l, "print", lua_print);
+
+	/*
+	 * initialize (empty) the current code output global variable TMPL_VAR
+	 *
+	 * this may be avoided by adding the proper checks in "lua_print()"
+	 * to avoid a segfault.
+	 */
 
 	lua_pushstring(l, "");
 	lua_setglobal(l, TMPL_VAR);
 
 	/* pass arguments to lua */
-	va_copy(args_copy, args);
+	va_copy(args_copy, args); /* do not modify "args", it is reused */
 
 	while ((key = va_arg(args_copy, char *)) != 0) {
 		val = va_arg(args_copy, char *);
 
-		if (val == NULL)
+		if (val == NULL) {
 			break;
+		}
 
 		lua_pushstring(l, val);
 		lua_setglobal(l, key);
@@ -207,7 +219,16 @@ static int lua_print(lua_State *l) {
 		lua_pop(l, 1);
 	}
 
-	/* update lua result varible */
+	/*
+	 * update lua template result variable
+	 *
+	 * the TMPL_VAR global variable is kept inside lua state, containing the
+	 * output of the lua code; at every "print()" call the print arguments
+	 * are appended to this variable and at the end of the code execution,
+	 * the variable is extracted and is used to replace the code block in
+	 * the template.
+	 */
+
 	lua_getglobal(l, TMPL_VAR);
 	tmpl = lua_tostring(l, -1);
 
