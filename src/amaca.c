@@ -88,21 +88,14 @@ char *Amaca_template_file(char *filename, ...) {
 }
 
 char *eval_template(char *template, va_list args) {
-	lua_State *l;
 	char *index = template;
+	char *start, *end, *token;
 
-	while (index) {
-		va_list args_copy;
-		char *key, *val;
-		int tmp, token_len;
-		char *tmpl_state, *start, *end, *token;
+	while ((start = strstr(index, TMPL_START)) != NULL) {
+		int token_len;
+		char *tmpl;
 
 		/* extract block of code */
-		start = strstr(index, TMPL_START);
-
-		if (start == NULL)
-			break;
-
 		end   = strstr(start, TMPL_END)+2;
 
 		token_len = (end - 2) - (start + 2);
@@ -112,10 +105,10 @@ char *eval_template(char *template, va_list args) {
 		token = memcpy((char *) token, start + 2, token_len);
 		check_value(token);
 
-		tmpl_state = lua_exec(token, args);
+		tmpl = lua_exec(token, args);
 
 		/* replace code block with its result */
-		index  = str_replace(index, tmpl_state, start, end);
+		index  = str_replace(index, tmpl, start, end);
 	}
 
 	return index;
