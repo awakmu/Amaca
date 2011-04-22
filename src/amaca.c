@@ -86,6 +86,8 @@ char *Amaca_template_file(const char *filename, ...) {
 	ret = eval_template(str, args);
 	va_end(args);
 
+	free(str);
+
 	return ret;
 }
 
@@ -111,6 +113,8 @@ char *eval_template(const char *template, va_list args) {
 
 		/* replace code block with its output */
 		index = str_replace(index, tmpl, start, end);
+
+		free(block);
 	}
 
 	return index;
