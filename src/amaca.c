@@ -91,7 +91,7 @@ char *Amaca_template_file(const char *filename, ...) {
 	return ret;
 }
 
-char *eval_template(const char *template, va_list args) {
+static char *eval_template(const char *template, va_list args) {
 	char *start, *end;
 	char *index = (char *) template;
 
