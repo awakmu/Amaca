@@ -4,7 +4,7 @@
 
 OPTI?=-O3 -fomit-frame-pointer
 CFLAGS?=-Wall -pedantic -I/usr/include/lua5.1 $(OPTI) -fPIC
-LDFLAGS?=-L. -llua5.1
+LDFLAGS?=-L. -Wl,-rpath,. -llua5.1
 
 DYLIB?=libamaca.so
 
