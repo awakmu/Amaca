@@ -13,10 +13,7 @@ all: example $(DYLIB)
 $(DYLIB): src/amaca.o
 	$(CC) -shared -fPIC -o $(DYLIB) src/amaca.o $(CFLAGS) $(LDFLAGS)
 
-example: eg/example.o src/amaca.o
-	$(CC) -o example eg/example.o src/amaca.o $(CFLAGS) $(LDFLAGS)
-
-example-shared: eg/example.o $(DYLIB)
+example: eg/example.o $(DYLIB)
 	$(CC) -o example eg/example.o $(CFLAGS) $(LDFLAGS) -lamaca
 
 src/amaca.o: src/amaca.c
