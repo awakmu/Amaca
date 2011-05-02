@@ -27,7 +27,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <stdlib.h>
 #include <string.h>
 
@@ -186,6 +185,10 @@ static char *lua_exec(char *code, va_list args) {
 
 	/* execute code block */
 	tmp = luaL_dostring(l, code);
+
+	if (tmp != 0) {
+		return NULL;
+	}
 
 	/* extract code block result */
 	lua_getglobal(l, TMPL_VAR);
