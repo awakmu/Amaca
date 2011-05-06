@@ -121,26 +121,22 @@ static char *eval_template(const char *template, va_list args) {
 
 static char *str_replace(char *orig, char *str, char *start, char *end) {
 	char *result = NULL;
-	char *current;
 
 	size_t src_len = strlen(orig);
 	size_t str_len = strlen(str);
 	size_t sub_len = end - start;
 
-	result = (char *) malloc((src_len - sub_len) + str_len + 1);
+	result = (char *) malloc((src_len - sub_len) + str_len);
 	check_value(result);
-	current = result;
 
-	current = strncpy(current, orig, start - orig);
-	check_value(current);
-	current += start - orig;
+	result = strncpy(result, orig, start - orig);
+	check_value(result);
 
-	current = strncpy(current, str, str_len);
-	check_value(current);
-	current += str_len;
+	result = strncat(result, str, str_len);
+	check_value(result);
 
-	current = strncpy(current, end, (orig + src_len) - end);
-	check_value(current);
+	result = strncat(result, end, (orig + src_len) - end);
+	check_value(result);
 
 	return result;
 }
