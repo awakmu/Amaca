@@ -91,6 +91,7 @@ char *Amaca_template_file(const char *filename, ...) {
 static char *eval_template(const char *template, va_list args) {
 	char *start, *end;
 	char *index = (char *) malloc(strlen(template) + 1);
+	check_value(index);
 
 	index = strcpy(index, template);
 
