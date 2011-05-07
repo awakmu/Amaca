@@ -88,15 +88,18 @@
 &lt;!DOCTYPE html&gt;
 
 &lt;head&gt;
-    &lt;title&gt;{{ print(title) }}&lt;/title&gt;
+    &lt;title&gt;{{ return title }}&lt;/title&gt;
 &lt;/head&gt;
 
 &lt;body&gt;
-    &lt;h1&gt;{{ print(body) }}&lt;/h1&gt;
+    &lt;h1&gt;{{ return body }}&lt;/h1&gt;
     {{
+        output = ''
         for i = 10, 1, -1 do
-            print('\n\t\t&lt;p&gt;Number ' .. i .. '&lt;/p&gt;\n')
+            output = output .. '\n\t\t&lt;p&gt;Number ' .. i .. '&lt;/p&gt;\n'
         end
+
+        return output
     }}
 &lt;/body&gt;
 &lt;/html&gt;
@@ -111,7 +114,7 @@
 
 int main() {
     char *str = Amaca_template_file(
-        "eg/example.tmpl",
+        "example.tmpl",
         "title", "This is a title",
         "body", "This is the body"
     );
