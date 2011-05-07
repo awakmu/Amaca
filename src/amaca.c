@@ -90,11 +90,13 @@ char *Amaca_template_file(const char *filename, ...) {
 
 static char *eval_template(const char *template, va_list args) {
 	char *start, *end;
-	char *index = (char *) template;
+	char *index = (char *) malloc(strlen(template) + 1);
+
+	index = strcpy(index, template);
 
 	while ((start = strstr(index, TMPL_START)) != NULL) {
 		size_t block_len;
-		char *tmpl, *block;
+		char *tmpl, *block, *nindex;
 
 		/* extract block of code */
 		end = strstr(start, TMPL_END)+2;
@@ -109,9 +111,12 @@ static char *eval_template(const char *template, va_list args) {
 		tmpl = lua_exec(block, args);
 
 		/* replace code block with its output */
-		index = str_replace(index, tmpl, start, end);
+		nindex = str_replace(index, tmpl, start, end);
 
+		free(index);
 		free(block);
+
+		index = nindex;
 	}
 
 	return index;
