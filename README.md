@@ -1,8 +1,7 @@
-    _______
-    ___    |______ _________ ____________ _
-    __  /| |_  __ `__ \  __ `/  ___/  __ `/
-    _  ___ |  / / / / / /_/ // /__ / /_/ /
-    /_/  |_/_/ /_/ /_/\__,_/ \___/ \__,_/
+Amaca
+=====
+
+![status](http://stillmaintained.com/AlexBio/Amaca.png)
 
 Amaca (pronounced: amàca) is a simple template engine written in C, which
 natively supports Lua scripting. This means that you can create your tamplates
@@ -43,3 +42,5 @@ a custom Makefile to build it.
 ## COPYRIGHT
 
 Copyright (C) 2011 Alessandro Ghedini <al3xbio@gmail.com>
+
+See COPYING for the license.
