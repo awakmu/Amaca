@@ -3,10 +3,13 @@
 #include "../src/amaca.h"
 
 int main() {
+	char *title = "This is a title";
+	char *body  = "This is the body";
+
 	char *str = Amaca_template_file(
 		"eg/example.tmpl",
-		"title", "This is a title",
-		"body", "This is the body"
+		"title", title,
+		"body", body
 	);
 
 	printf("%s", str);
