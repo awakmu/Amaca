@@ -27,6 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -37,7 +38,7 @@
 #define TMPL_START "{{"
 #define TMPL_END   "}}"
 
-#define check_value(x) if (x == NULL) return NULL;
+#define check_value(x) assert(x);
 
 char *Amaca_template(const char *template, ...);
 char *Amaca_template_file(const char *filename, ...);
@@ -172,10 +173,7 @@ static char *lua_exec(char *code, va_list args) {
 
 	/* execute code block */
 	tmp = luaL_dostring(l, code);
-
-	if (tmp != 0) {
-		return NULL;
-	}
+	check_value(tmp);
 
 	/* extract code block result */
 	tmpl = calloc(lua_strlen(l, -1) + 1, 1);
