@@ -8,7 +8,7 @@ LDFLAGS?=-L. -Wl,-rpath,. -llua5.1
 
 DYLIB?=libamaca.so
 
-all: example $(DYLIB)
+all: example test $(DYLIB)
 
 $(DYLIB): src/amaca.o
 	$(CC) -shared -fPIC -o $(DYLIB) src/amaca.o $(CFLAGS) $(LDFLAGS)
@@ -16,8 +16,12 @@ $(DYLIB): src/amaca.o
 example: eg/example.o $(DYLIB)
 	$(CC) -o example eg/example.o $(CFLAGS) $(LDFLAGS) -lamaca
 
+test: test.o $(DYLIB)
+	$(CC) -o test test.o $(CFLAGS) $(LDFLAGS) -lamaca
+
 src/amaca.o: src/amaca.c
 eg/example.o: eg/example.c eg/../src/amaca.h
+test.o: test.c src/amaca.h
 
 clean:
-	$(RM) -rf example eg/*.o src/*.o *.so
+	$(RM) -rf example test eg/*.o src/*.o *.*o
