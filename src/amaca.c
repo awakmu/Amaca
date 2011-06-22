@@ -71,7 +71,7 @@ char *Amaca_template_file(const char *filename, ...) {
 	fd_size = ftell(fd);
 	fseek(fd, 0, SEEK_SET);
 
-	str = (char *) malloc(fd_size + 1);
+	str = calloc(fd_size + 1, 1);
 	check_value(str);
 
 	fread(str, sizeof(char), fd_size, fd);
@@ -90,7 +90,7 @@ char *Amaca_template_file(const char *filename, ...) {
 
 static char *eval_template(const char *template, va_list args) {
 	char *start, *end;
-	char *index = (char *) malloc(strlen(template) + 1);
+	char *index = calloc(strlen(template) + 1, 1);
 	check_value(index);
 
 	index = strcpy(index, template);
@@ -103,7 +103,7 @@ static char *eval_template(const char *template, va_list args) {
 		end = strstr(start, TMPL_END)+2;
 
 		block_len = (end - 2) - (start + 2);
-		block = (char *) malloc(block_len + 1);
+		block = calloc(block_len + 1, 1);
 		check_value(block);
 
 		block = memcpy((char *) block, start + 2, block_len);
@@ -130,7 +130,7 @@ static char *str_replace(char *orig, char *str, char *start, char *end) {
 	size_t str_len = strlen(str);
 	size_t sub_len = end - start;
 
-	result = (char *) malloc((src_len - sub_len) + str_len);
+	result = calloc((src_len - sub_len) + str_len + 1, 1);
 	check_value(result);
 
 	result = strncpy(result, orig, start - orig);
