@@ -106,7 +106,7 @@ static char *eval_template(const char *template, va_list args) {
 		block = calloc(block_len + 1, 1);
 		check_value(block);
 
-		block = memcpy((char *) block, start + 2, block_len);
+		block = memcpy(block, start + 2, block_len);
 		check_value(block);
 
 		tmpl = lua_exec(block, args);
@@ -178,7 +178,9 @@ static char *lua_exec(char *code, va_list args) {
 	}
 
 	/* extract code block result */
-	tmpl = (char *) lua_tostring(l, -1);
+	tmpl = calloc(lua_strlen(l, -1) + 1, 1);
+
+	tmpl = strcpy(tmpl, lua_tostring(l, -1));
 
 	lua_settop(l, 0);
 	lua_close(l);
