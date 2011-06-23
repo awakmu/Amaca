@@ -23,7 +23,11 @@ represents the number of key-value pairs passed to the function.
 It's the same as the previous function, but it takes as argument the path to a
 template file.
 
-The templates are just plain text strings/files containing blocks of Lua code.
+The functions `Amaca_vtemplate()` and `Amaca_vtemplate_file()` are equivalent to
+the functions `Amaca_template()` and `Amaca_template_file()` respectively, except
+that they are called with a va_list instead of a variable number of arguments.
+
+The templates are just plain text strings or files containing blocks of Lua code.
 The code blocks have to be enclosed between `{{` and `}}`.
 
 See the `eg/example.tmpl` file for a template example, and the `eg/example.c`
