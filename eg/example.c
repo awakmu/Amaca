@@ -7,7 +7,7 @@ int main() {
 	char *body  = "This is the body";
 
 	char *str = Amaca_template_file(
-		"eg/example.tmpl",
+		"eg/example.tmpl", 2,
 		"title", title,
 		"body", body
 	);

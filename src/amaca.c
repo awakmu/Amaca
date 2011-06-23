@@ -40,26 +40,26 @@
 
 #define check_value(x) assert(x);
 
-char *Amaca_template(const char *template, ...);
-char *Amaca_template_file(const char *filename, ...);
+char *Amaca_template(const char *template, int nargs, ...);
+char *Amaca_template_file(const char *filename, int nargs, ...);
 
-static char *lua_exec(char *code, va_list args);
-static char *eval_template(const char *template, va_list args);
+static char *lua_exec(char *code, int nargs, va_list args);
+static char *eval_template(const char *template, int nargs, va_list args);
 static char *str_replace(char *orig, char *str, char *start, char *end);
 
-char *Amaca_template(const char *template, ...) {
+char *Amaca_template(const char *template,  int nargs, ...) {
 	char *ret;
 	va_list args;
 
 	/* eval template with proper args */
-	va_start(args, template);
-	ret = eval_template(template, args);
+	va_start(args, nargs);
+	ret = eval_template(template, nargs, args);
 	va_end(args);
 
 	return ret;
 }
 
-char *Amaca_template_file(const char *filename, ...) {
+char *Amaca_template_file(const char *filename,  int nargs, ...) {
 	va_list args;
 	size_t fd_size;
 	char *str, *ret;
@@ -80,8 +80,8 @@ char *Amaca_template_file(const char *filename, ...) {
 	fclose(fd);
 
 	/* eval template with proper args */
-	va_start(args, filename);
-	ret = eval_template(str, args);
+	va_start(args, nargs);
+	ret = eval_template(str, nargs, args);
 	va_end(args);
 
 	free(str);
@@ -89,7 +89,7 @@ char *Amaca_template_file(const char *filename, ...) {
 	return ret;
 }
 
-static char *eval_template(const char *template, va_list args) {
+static char *eval_template(const char *template, int nargs, va_list args) {
 	char *start, *end;
 	char *index = calloc(strlen(template) + 1, 1);
 	check_value(index);
@@ -110,7 +110,7 @@ static char *eval_template(const char *template, va_list args) {
 		block = memcpy(block, start + 2, block_len);
 		check_value(block);
 
-		tmpl = lua_exec(block, args);
+		tmpl = lua_exec(block, nargs, args);
 
 		/* replace code block with its output */
 		nindex = str_replace(index, tmpl, start, end);
@@ -146,34 +146,47 @@ static char *str_replace(char *orig, char *str, char *start, char *end) {
 	return result;
 }
 
-static char *lua_exec(char *code, va_list args) {
-	int tmp;
-	va_list args_copy;
-	char *tmpl, *key, *val;
+static char *lua_exec(char *code, int nargs, va_list args) {
+	int tmp, i;
+	char *tmpl;
+	va_list args_c;
 
 	/* initialize lua state */
 	lua_State *l = luaL_newstate();
 	luaL_openlibs(l);
 
-	/* pass arguments to lua */
-	va_copy(args_copy, args); /* do not modify "args", it is reused */
+	/*
+	 * pass arguments to lua
+	 * use a copy of args because it is reused
+	 */
+	va_copy(args_c, args);
 
-	while ((key = va_arg(args_copy, char *)) != 0) {
-		val = va_arg(args_copy, char *);
+	for (i = 0; i < nargs; i++) {
+		char *key, *val;
+		char *key_c, *val_c;
+
+		key = va_arg(args_c, char *);
+		val = va_arg(args_c, char *);
 
 		if (val == NULL) {
 			break;
 		}
 
-		lua_pushstring(l, val);
-		lua_setglobal(l, key);
+		key_c = calloc(strlen(key) + 1, 1);
+		key_c = strcpy(key_c, key);
+
+		val_c = calloc(strlen(val) + 1, 1);
+		val_c = strcpy(val_c, val);
+
+		lua_pushstring(l, val_c);
+		lua_setglobal(l, key_c);
 	}
 
-	va_end(args_copy);
+	va_end(args_c);
 
 	/* execute code block */
 	tmp = luaL_dostring(l, code);
-	check_value(tmp);
+	check_value(tmp == 0);
 
 	/* extract code block result */
 	tmpl = calloc(lua_strlen(l, -1) + 1, 1);

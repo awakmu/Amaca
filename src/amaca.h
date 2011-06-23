@@ -30,6 +30,7 @@
 /**
  * Amaca_template - parse and eval a given template string
  * @param template Template string
+ * @param nargs The number of the following key-value pairs
  * @param ... List of key-value pairs to pass to the template
  *
  * This function parses and evaluates the given template string, and returns
@@ -47,11 +48,12 @@
  *
  */
 
-extern char *Amaca_template(const char *template, ...);
+extern char *Amaca_template(const char *template, int nargs, ...);
 
 /**
  * Amaca_template_file - parse and eval a given template file
  * @param filename Template filename
+ * @param nargs The number of the following key-value pairs
  * @param ... List of key-value pairs to pass to the template
  *
  * Just like Amaca_template() but takes as argument a template file instead
@@ -68,4 +70,4 @@ extern char *Amaca_template(const char *template, ...);
  *
  */
 
-extern char *Amaca_template_file(const char *filename, ...);
+extern char *Amaca_template_file(const char *filename, int nargs, ...);
