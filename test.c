@@ -4,38 +4,75 @@
 
 #include "src/amaca.h"
 
-static int run = 0, failed = 0;
+static unsigned int run = 0, failed = 0;
 
 #define test_diag(name) printf("#%02d %s .. ", ++run, name);
 #define test_cond(cond) if (cond) puts("OK"); else {puts("FAIL"); failed++;}
 
 void test_template_simple() {
 	char *result;
-	char *tmpl = "This is the {{ return arg }} test";
+	char *tmpl = "This is the {{ return arg1 .. arg2 }} test";
 
 	test_diag("Test simple #1");
-	result = Amaca_template(tmpl, 1, "arg", "first");
+	result = Amaca_template(tmpl, 2, "arg1", "fir", "arg2", "st");
 	test_cond(strcmp(result, "This is the first test") == 0);
 	free(result);
 
 	test_diag("Test simple #2");
-	result = Amaca_template(tmpl, 1, "arg", "second");
+	result = Amaca_template(tmpl, 2, "arg1", "sec", "arg2", "ond");
 	test_cond(strcmp(result, "This is the second test") == 0);
 	free(result);
 
 	test_diag("Test simple #3");
-	result = Amaca_template(tmpl, 1, "arg", "third");
+	result = Amaca_template(tmpl, 2, "arg1", "thi", "arg2", "rd");
 	test_cond(strcmp(result, "This is the third test") == 0);
 	free(result);
 }
 
+void test_template_multiple() {
+	char *result;
+	char *tmpl = "This is the {{ return arg }} test. Yes, the {{ return arg }}!";
+
+	test_diag("Test multiple #1");
+	result = Amaca_template(tmpl, 1, "arg", "first");
+	test_cond(strcmp(result, "This is the first test. Yes, the first!") == 0);
+	free(result);
+
+	test_diag("Test multiple #2");
+	result = Amaca_template(tmpl, 1, "arg", "second");
+	test_cond(strcmp(result, "This is the second test. Yes, the second!") == 0);
+	free(result);
+
+	test_diag("Test multiple #3");
+	result = Amaca_template(tmpl, 1, "arg", "third");
+	test_cond(strcmp(result, "This is the third test. Yes, the third!") == 0);
+	free(result);
+}
+
+void test_template_file() {
+	char *result;
+	char *title = "This is a title";
+	char *body  = "This is the body";
+
+	test_diag("Test file #1");
+	result = Amaca_template_file("eg/example.tmpl", 2, "title", title, "body", body);
+	test_cond(strcmp(result, "<!DOCTYPE html>\n\n<head>\n\t<title>This is a title</title>\n</head>\n\n<body>\n\t<h1>This is the body</h1>\n\t\n\t\t<p>Number 10</p>\n\n\t\t<p>Number 9</p>\n\n\t\t<p>Number 8</p>\n\n\t\t<p>Number 7</p>\n\n\t\t<p>Number 6</p>\n\n\t\t<p>Number 5</p>\n\n\t\t<p>Number 4</p>\n\n\t\t<p>Number 3</p>\n\n\t\t<p>Number 2</p>\n\n\t\t<p>Number 1</p>\n\n</body>\n</html>\n") == 0);
+	free(result);
+}
+
 int main() {
+	putchar('\n');
+
 	test_template_simple();
+	test_template_multiple();
+	test_template_file();
 
 	if (failed > 0) {
-		printf("%d TESTs HAVE FAILED!\n", failed);
+		printf("\n%d/%d TESTS HAVE FAILED!\n", failed, run);
 		return -1;
 	}
+
+	printf("\n%d/%d TESTS SUCCESSFULLY RUN!\n", run, run);
 
 	return 0;
 }
