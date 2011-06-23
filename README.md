@@ -4,13 +4,13 @@ Amaca
 ![status](http://stillmaintained.com/AlexBio/Amaca.png)
 
 Amaca (pronounced: amàca) is a simple template engine written in C, which
-natively supports Lua scripting. This means that you can create your tamplates
+natively supports Lua scripting. This means that you can create your templates
 without the need to learn yet another templating language. You'll need just a
 minimal knowledge of the plain and simple Lua.
 
 ## USAGE
 
-Amaca consists of just two functions:
+Amaca consists of the following functions:
 
     char *Amaca_template(const char *template, int nargs, ...);
 
