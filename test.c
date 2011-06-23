@@ -72,7 +72,6 @@ void test_vtemplate_simple_helper(const char *template, int nargs, va_list args)
 
 void test_vtemplate_simple(int nargs, ...) {
 	va_list args;
-	char *result;
 	char *tmpl = "This is the {{ return arg1 .. arg2 }} test";
 
 	va_start(args, nargs);
@@ -91,7 +90,6 @@ void test_vtemplate_file_helper(const char *template, int nargs, va_list args) {
 
 void test_vtemplate_file(int nargs, ...) {
 	va_list args;
-	char *result;
 
 	va_start(args, nargs);
 	test_vtemplate_file_helper("eg/example.tmpl", nargs, args);
