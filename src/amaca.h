@@ -41,7 +41,7 @@
  * Example:
  *
  *   char *result = Amaca_template(
- *       template_string,
+ *       template_string, 2,
  *       "my_var1", "Var1 content",
  *       "my_var2", "Var2 content"
  * );
@@ -62,8 +62,8 @@ extern char *Amaca_template(const char *template, int nargs, ...);
  *
  * Example:
  *
- *   char *result = Amaca_template(
- *       "/path/to/file.tmpl",
+ *   char *result = Amaca_template_file(
+ *       "/path/to/file.tmpl", 2,
  *       "my_var1", "Var1 content",
  *       "my_var2", "Var2 content"
  * );
@@ -72,5 +72,36 @@ extern char *Amaca_template(const char *template, int nargs, ...);
 
 extern char *Amaca_template_file(const char *filename, int nargs, ...);
 
+/**
+ * Amaca_vtemplate - parse and eval a given template string
+ * @param template Template string
+ * @param nargs The number of the following key-value pairs
+ * @param args va_list of key-value pairs to pass to the template
+ *
+ * This function is equivalent to the function Amaca_template() except that
+ * it is called with a va_list instead of a variable number of arguments.
+ *
+ * Example:
+ *
+ *   char *result = Amaca_vtemplate(template_string, nargs, args);
+ *
+ */
+
 extern char *Amaca_vtemplate(const char *template, int nargs, va_list args);
+
+/**
+ * Amaca_vtemplate_file - parse and eval a given template file
+ * @param filename Template filename
+ * @param nargs The number of the following key-value pairs
+ * @param args va_list of key-value pairs to pass to the template
+ *
+ * This function is equivalent to the function Amaca_template_file() except that
+ * it is called with a va_list instead of a variable number of arguments.
+ *
+ * Example:
+ *
+ *   char *result = Amaca_vtemplate_file("/path/to/file.tmpl", nargs, args);
+ *
+ */
+
 extern char *Amaca_vtemplate_file(const char *filename, int nargs, va_list args);
