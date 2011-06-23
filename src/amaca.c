@@ -43,6 +43,9 @@
 char *Amaca_template(const char *template, int nargs, ...);
 char *Amaca_template_file(const char *filename, int nargs, ...);
 
+char *Amaca_vtemplate(const char *template, int nargs, va_list args);
+char *Amaca_vtemplate_file(const char *filename, int nargs, va_list args);
+
 static char *lua_exec(char *code, int nargs, va_list args);
 static char *eval_template(const char *template, int nargs, va_list args);
 static char *str_replace(char *orig, char *str, char *start, char *end);
@@ -83,6 +86,42 @@ char *Amaca_template_file(const char *filename,  int nargs, ...) {
 	va_start(args, nargs);
 	ret = eval_template(str, nargs, args);
 	va_end(args);
+
+	free(str);
+
+	return ret;
+}
+
+char *Amaca_vtemplate(const char *template,  int nargs, va_list args) {
+	char *ret;
+
+	/* eval template with proper args */
+	ret = eval_template(template, nargs, args);
+
+	return ret;
+}
+
+char *Amaca_vtemplate_file(const char *filename,  int nargs, va_list args) {
+	size_t fd_size;
+	char *str, *ret;
+
+	FILE *fd = fopen(filename, "rb");
+	check_value(fd);
+
+	/* read template file into memory */
+	fseek(fd, 0, SEEK_END);
+	fd_size = ftell(fd);
+	fseek(fd, 0, SEEK_SET);
+
+	str = calloc(fd_size + 1, 1);
+	check_value(str);
+
+	fread(str, sizeof(char), fd_size, fd);
+
+	fclose(fd);
+
+	/* eval template with proper args */
+	ret = eval_template(str, nargs, args);
 
 	free(str);
 

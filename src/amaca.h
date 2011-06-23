@@ -71,3 +71,6 @@ extern char *Amaca_template(const char *template, int nargs, ...);
  */
 
 extern char *Amaca_template_file(const char *filename, int nargs, ...);
+
+extern char *Amaca_vtemplate(const char *template, int nargs, va_list args);
+extern char *Amaca_vtemplate_file(const char *filename, int nargs, va_list args);
