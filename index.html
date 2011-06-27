@@ -61,6 +61,7 @@
     .man-ref { letter-spacing:-1px; }
     .copyright { font-size:18px; }
     .caption { text-align: center; font-size: 80% }
+    .code {font-size:12px}
   </style>
 </head>
 <body>
@@ -85,46 +86,41 @@
   <dl>
     <dt>
       <p>Template file (<a href='http://github.com/AlexBio/Amaca/blob/master/eg/example.tmpl#files'>example.tmpl</a>):</p>
-      <pre>
-&lt;!DOCTYPE html&gt;
-
-&lt;head&gt;
-    &lt;title&gt;{{ return title }}&lt;/title&gt;
-&lt;/head&gt;
-
-&lt;body&gt;
-    &lt;h1&gt;{{ return body }}&lt;/h1&gt;
-    {{
-        output = ''
-        for i = 10, 1, -1 do
-            output = output .. '\n\t\t&lt;p&gt;Number ' .. i .. '&lt;/p&gt;\n'
-        end
-
-        return output
-    }}
-&lt;/body&gt;
-&lt;/html&gt;
-      </pre>
+<div class="code"><div class="html4strict" style="font-family:monospace;color: #006; border: 1px solid #d0d0d0; padding: 10px;"><span style="color: #00bbdd;">&lt;!DOCTYPE html&gt;</span><br />
+<br />
+<span style="color: #009900;">&lt;<a style="color: #000060;" href="http://december.com/html/4/element/head.html"><span style="color: #000000; font-weight: bold;">head</span></a>&gt;</span><br />
+&nbsp; &nbsp; <span style="color: #009900;">&lt;<a style="color: #000060;" href="http://december.com/html/4/element/title.html"><span style="color: #000000; font-weight: bold;">title</span></a>&gt;</span>{{ return title }}<span style="color: #009900;">&lt;<span style="color: #66cc66;">/</span><a style="color: #000060;" href="http://december.com/html/4/element/title.html"><span style="color: #000000; font-weight: bold;">title</span></a>&gt;</span><br />
+<span style="color: #009900;">&lt;<span style="color: #66cc66;">/</span><a style="color: #000060;" href="http://december.com/html/4/element/head.html"><span style="color: #000000; font-weight: bold;">head</span></a>&gt;</span><br />
+<br />
+<span style="color: #009900;">&lt;<a style="color: #000060;" href="http://december.com/html/4/element/body.html"><span style="color: #000000; font-weight: bold;">body</span></a>&gt;</span><br />
+&nbsp; &nbsp; <span style="color: #009900;">&lt;<a style="color: #000060;" href="http://december.com/html/4/element/h1.html"><span style="color: #000000; font-weight: bold;">h1</span></a>&gt;</span>{{ return body }}<span style="color: #009900;">&lt;<span style="color: #66cc66;">/</span><a style="color: #000060;" href="http://december.com/html/4/element/h1.html"><span style="color: #000000; font-weight: bold;">h1</span></a>&gt;</span><br />
+&nbsp; &nbsp; {{<br />
+<div class="lua" style="font-family:monospace;color: #006;">&nbsp; &nbsp; &nbsp; &nbsp; output <span style="color: #66cc66;">=</span> <span style="color: #ff0000;">''</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">for</span> i <span style="color: #66cc66;">=</span> <span style="color: #cc66cc;">10</span>, <span style="color: #cc66cc;">1</span>, -<span style="color: #cc66cc;">1</span> <span style="color: #b1b100;">do</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; output <span style="color: #66cc66;">=</span> output .. <span style="color: #ff0000;">'<span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span>&lt;p&gt;Number '</span> .. i .. <span style="color: #ff0000;">'&lt;/p&gt;<span style="color: #000099; font-weight: bold;">\n</span>'</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">end</span><br />
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> output</div>
+&nbsp; &nbsp; }}<br />
+<span style="color: #009900;">&lt;<span style="color: #66cc66;">/</span><a style="color: #000060;" href="http://december.com/html/4/element/body.html"><span style="color: #000000; font-weight: bold;">body</span></a>&gt;</span><br />
+<span style="color: #009900;">&lt;<span style="color: #66cc66;">/</span><a style="color: #000060;" href="http://december.com/html/4/element/html.html"><span style="color: #000000; font-weight: bold;">html</span></a>&gt;</span></div></div>
     </dt>
     <dt>
       <p>C code (<a href='http://github.com/AlexBio/Amaca/blob/master/eg/example.c#files'>example.c</a>):</p>
-      <pre>
-#include &lt;stdio.h&gt;
-
-#include "amaca.h"
-
-int main() {
-    char *str = Amaca_template_file(
-        "example.tmpl", 2,
-        "title", "This is a title",
-        "body", "This is the body"
-    );
-
-    printf("%s", str);
-
-    return 0;
-}
-      </pre>
+<div class="code"><div class="c" style="font-family:monospace;color: #006; border: 1px solid #d0d0d0; padding: 10px;"><span style="color: #339933;">#include &lt;stdio.h&gt;</span><br />
+<span style="color: #339933;">#include &quot;amaca.h&quot;</span><br />
+<br />
+<span style="color: #993333;">int</span> main<span style="color: #009900;">&#40;</span><span style="color: #009900;">&#41;</span> <span style="color: #009900;">&#123;</span><br />
+&nbsp; &nbsp; <span style="color: #993333;">char</span> <span style="color: #339933;">*</span>str <span style="color: #339933;">=</span> Amaca_template_file<span style="color: #009900;">&#40;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">&quot;example.tmpl&quot;</span><span style="color: #339933;">,</span> <span style="color: #0000dd;">2</span><span style="color: #339933;">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">&quot;title&quot;</span><span style="color: #339933;">,</span> <span style="color: #ff0000;">&quot;This is a title&quot;</span><span style="color: #339933;">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">&quot;body&quot;</span><span style="color: #339933;">,</span> <span style="color: #ff0000;">&quot;This is the body&quot;</span><br />
+&nbsp; &nbsp; <span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span><br />
+<br />
+&nbsp; &nbsp; <a style="color: #000060;" href="http://www.opengroup.org/onlinepubs/009695399/functions/printf.html"><span style="color: #000066;">printf</span></a><span style="color: #009900;">&#40;</span><span style="color: #ff0000;">&quot;%s&quot;</span><span style="color: #339933;">,</span> str<span style="color: #009900;">&#41;</span><span style="color: #339933;">;</span><br />
+<br />
+&nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000dd;">0</span><span style="color: #339933;">;</span><br />
+<span style="color: #009900;">&#125;</span></div></div>
     </dt>
   </dl>
 
