@@ -8,7 +8,24 @@ natively supports Lua scripting. This means that you can create your templates
 without the need to learn yet another templating language. You'll need just a
 minimal knowledge of the plain and simple Lua.
 
-## USAGE
+## GETTING STARTED
+
+    #include <amaca.h>
+
+    int main() {
+      char *title = "This is a title";
+      char *body  = "This is the body";
+
+      char *str = Amaca_template_file(
+        "eg/example.tmpl", 2,
+        "title", title,
+        "body", body
+      );
+
+      return 0;
+    }
+
+## OVERVIEW
 
 Amaca consists of the following functions:
 
@@ -33,7 +50,7 @@ The code blocks have to be enclosed between `{{` and `}}`.
 See the `eg/example.tmpl` file for a template example, and the `eg/example.c`
 file for a (very simple) code example.
 
-## INSTALLATION
+## BUILDING
 
 Amaca is distributed as source code. Install with:
 
@@ -42,7 +59,7 @@ Amaca is distributed as source code. Install with:
     $ make
 
 You can also copy-paste the `src/amaca.{c,h}` files inside your project and use
-a custom Makefile to build it.
+a custom Makefile to build them.
 
 ## COPYRIGHT
 
