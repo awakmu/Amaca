@@ -50,6 +50,10 @@ The code blocks have to be enclosed between `{{` and `}}`.
 See the `eg/example.tmpl` file for a template example, and the `eg/example.c`
 file for a (very simple) code example.
 
+## DEPENDENCIES
+
+ * `libluajit` or `liblua`
+
 ## BUILDING
 
 Amaca is distributed as source code. Install with:
