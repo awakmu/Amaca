@@ -2,9 +2,13 @@
 # Copyright (C) 2011 Alessandro Ghedini <al3xbio@gmail.com>
 # This file is released under the BSD license, see the COPYING file
 
+LUA_PACKAGE?=lua5.1
+LUA_CFLAGS?=`pkg-config --cflags $(LUA_PACKAGE)`
+LUA_LDFLAGS?=`pkg-config --libs $(LUA_PACKAGE)`
+
 OPTI?=-O3 -fomit-frame-pointer
-CFLAGS?=-Wall -pedantic -I/usr/include/lua5.1 $(OPTI) -fPIC
-LDFLAGS?=-L. -Wl,-rpath,. -llua5.1
+CFLAGS?=-Wall -pedantic $(OPTI) $(LUA_CFLAGS) -fPIC
+LDFLAGS?=-L. -Wl,-rpath,. $(LUA_LDFLAGS)
 
 DYLIB?=libamaca.so
 
