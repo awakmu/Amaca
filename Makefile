@@ -3,6 +3,7 @@
 # This file is released under the BSD license, see the COPYING file
 
 LUA_TEST=$(shell pkg-config --exists luajit && echo 1)
+
 ifdef LUA_TEST
 	LUA_PACKAGE=luajit
 else
@@ -13,8 +14,8 @@ LUA_CFLAGS?=`pkg-config --cflags $(LUA_PACKAGE)`
 LUA_LDFLAGS?=`pkg-config --libs $(LUA_PACKAGE)`
 
 OPTI?=-O3 -fomit-frame-pointer
-CFLAGS?=-Wall -pedantic $(OPTI) $(LUA_CFLAGS) -fPIC
-LDFLAGS?=-L. -Wl,-rpath,. $(LUA_LDFLAGS)
+CFLAGS=-Wall -pedantic $(OPTI) $(LUA_CFLAGS) -fPIC
+LDFLAGS=-L. -Wl,-rpath,. $(LUA_LDFLAGS)
 
 DYLIB?=libamaca.so
 
