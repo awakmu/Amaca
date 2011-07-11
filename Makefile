@@ -13,7 +13,7 @@ endif
 LUA_CFLAGS?=`pkg-config --cflags $(LUA_PACKAGE)`
 LUA_LDFLAGS?=`pkg-config --libs $(LUA_PACKAGE)`
 
-OPTI?=-O3 -fomit-frame-pointer
+OPTI?=-O3
 CFLAGS=-Wall -pedantic $(OPTI) $(LUA_CFLAGS) -fPIC
 LDFLAGS=-L. -Wl,-rpath,. $(LUA_LDFLAGS)
 
