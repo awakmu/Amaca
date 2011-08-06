@@ -46,24 +46,24 @@
 
 #define check_value(x) assert(x);
 
-char *Amaca_template(const char *template, int nargs, ...);
-char *Amaca_template_file(const char *filename, int nargs, ...);
+char *amaca_eval(const char *template, int nargs, ...);
+char *amaca_eval_file(const char *filename, int nargs, ...);
 
-char *Amaca_vtemplate(const char *template, int nargs, va_list args);
-char *Amaca_vtemplate_file(const char *filename, int nargs, va_list args);
+char *amaca_veval(const char *template, int nargs, va_list args);
+char *amaca_veval_file(const char *filename, int nargs, va_list args);
 
 static char *read_file(const char *filename);
 static char *lua_exec(char *code, int nargs, va_list args);
-static char *eval_template(const char *template, int nargs, va_list args);
+static char *eval_eval(const char *template, int nargs, va_list args);
 static char *str_replace(char *orig, char *str, char *start, char *end);
 
-char *Amaca_template(const char *template,  int nargs, ...) {
+char *amaca_eval(const char *template,  int nargs, ...) {
 	char *ret;
 	va_list args;
 
 	/* eval template with proper args */
 	va_start(args, nargs);
-	ret = eval_template(template, nargs, args);
+	ret = eval_eval(template, nargs, args);
 	va_end(args);
 
 	check_value(ret);
@@ -71,14 +71,14 @@ char *Amaca_template(const char *template,  int nargs, ...) {
 	return ret;
 }
 
-char *Amaca_template_file(const char *filename,  int nargs, ...) {
+char *amaca_eval_file(const char *filename,  int nargs, ...) {
 	va_list args;
 	char *ret, *str = read_file(filename);
 	check_value(str);
 
 	/* eval template with proper args */
 	va_start(args, nargs);
-	ret = eval_template(str, nargs, args);
+	ret = eval_eval(str, nargs, args);
 	va_end(args);
 
 	check_value(ret);
@@ -88,23 +88,23 @@ char *Amaca_template_file(const char *filename,  int nargs, ...) {
 	return ret;
 }
 
-char *Amaca_vtemplate(const char *template,  int nargs, va_list args) {
+char *amaca_veval(const char *template,  int nargs, va_list args) {
 	char *ret;
 
 	/* eval template with proper args */
-	ret = eval_template(template, nargs, args);
+	ret = eval_eval(template, nargs, args);
 	check_value(ret);
 
 	return ret;
 }
 
-char *Amaca_vtemplate_file(const char *filename,  int nargs, va_list args) {
+char *amaca_veval_file(const char *filename,  int nargs, va_list args) {
 	char *ret;
 	char *str = read_file(filename);
 	check_value(str);
 
 	/* eval template with proper args */
-	ret = eval_template(str, nargs, args);
+	ret = eval_eval(str, nargs, args);
 	check_value(ret);
 
 	free(str);
@@ -112,7 +112,7 @@ char *Amaca_vtemplate_file(const char *filename,  int nargs, va_list args) {
 	return ret;
 }
 
-static char *eval_template(const char *template, int nargs, va_list args) {
+static char *eval_eval(const char *template, int nargs, va_list args) {
 	char *start, *end;
 	char *index = calloc(strlen(template) + 1, 1);
 	check_value(index);

@@ -6,7 +6,7 @@ int main() {
 	char *title = "This is a title";
 	char *body  = "This is the body";
 
-	char *str = Amaca_template_file(
+	char *str = amaca_eval_file(
 		"eg/example.tmpl", 2,
 		"title", title,
 		"body", body

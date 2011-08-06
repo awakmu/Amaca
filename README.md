@@ -16,7 +16,7 @@ minimal knowledge of the plain and simple Lua.
       char *title = "This is a title";
       char *body  = "This is the body";
 
-      char *str = Amaca_template_file(
+      char *str = amaca_eval_file(
         "eg/example.tmpl", 2,
         "title", title,
         "body", body
@@ -29,19 +29,19 @@ minimal knowledge of the plain and simple Lua.
 
 Amaca consists of the following functions:
 
-    char *Amaca_template(const char *template, int nargs, ...);
+    char *amaca_eval(const char *template, int nargs, ...);
 
 Which takes as argument a template string and a list of key-value pairs to pass
 to the template code, which will be available within the Lua scripts. `nargs`
 represents the number of key-value pairs passed to the function.
 
-    char *Amaca_template_file(const char *filename, int nargs, ...);
+    char *amaca_eval_file(const char *filename, int nargs, ...);
 
 It's the same as the previous function, but it takes as argument the path to a
 template file.
 
-The functions `Amaca_vtemplate()` and `Amaca_vtemplate_file()` are equivalent to
-the functions `Amaca_template()` and `Amaca_template_file()` respectively, except
+The functions `amaca_veval()` and `amaca_veval_file()` are equivalent to
+the functions `amaca_eval()` and `amaca_eval_file()` respectively, except
 that they are called with a va_list instead of a variable number of arguments.
 
 The templates are just plain text strings or files containing blocks of Lua code.

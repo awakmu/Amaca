@@ -34,19 +34,19 @@
  */
 
 /**
- * Amaca_template - parse and eval a given template string
+ * amaca_eval - parse and eval a given template string
  * @param template Template string
  * @param nargs The number of the following key-value pairs
  * @param ... List of key-value pairs to pass to the template
  *
- * This function parses and evaluates the given template string, and returns
+ * This function evals and evaluates the given template string, and returns
  * a pointer to the resulting string (returns NULL on failure). It also
  * optionally takes a list of key-value pairs that are passed to the template
  * as Lua variables.
  *
  * Example:
  *
- *   char *result = Amaca_template(
+ *   char *result = amaca_eval(
  *       template_string, 2,
  *       "my_var1", "Var1 content",
  *       "my_var2", "Var2 content"
@@ -54,21 +54,21 @@
  *
  */
 
-extern char *Amaca_template(const char *template, int nargs, ...);
+extern char *amaca_eval(const char *template, int nargs, ...);
 
 /**
- * Amaca_template_file - parse and eval a given template file
+ * amaca_eval_file - parse and eval a given template file
  * @param filename Template filename
  * @param nargs The number of the following key-value pairs
  * @param ... List of key-value pairs to pass to the template
  *
- * Just like Amaca_template() but takes as argument a template file instead
+ * Just like amaca_eval() but takes as argument a template file instead
  * of a string. It also optionally takes a list of key-value pairs that are
  * passed to the template as Lua variables.
  *
  * Example:
  *
- *   char *result = Amaca_template_file(
+ *   char *result = amaca_eval_file(
  *       "/path/to/file.tmpl", 2,
  *       "my_var1", "Var1 content",
  *       "my_var2", "Var2 content"
@@ -76,38 +76,38 @@ extern char *Amaca_template(const char *template, int nargs, ...);
  *
  */
 
-extern char *Amaca_template_file(const char *filename, int nargs, ...);
+extern char *amaca_eval_file(const char *filename, int nargs, ...);
 
 /**
- * Amaca_vtemplate - parse and eval a given template string
+ * amaca_veval - parse and eval a given template string
  * @param template Template string
  * @param nargs The number of the following key-value pairs
  * @param args va_list of key-value pairs to pass to the template
  *
- * This function is equivalent to the function Amaca_template() except that
+ * This function is equivalent to the function amaca_eval() except that
  * it is called with a va_list instead of a variable number of arguments.
  *
  * Example:
  *
- *   char *result = Amaca_vtemplate(template_string, nargs, args);
+ *   char *result = amaca_veval(template_string, nargs, args);
  *
  */
 
-extern char *Amaca_vtemplate(const char *template, int nargs, va_list args);
+extern char *amaca_veval(const char *template, int nargs, va_list args);
 
 /**
- * Amaca_vtemplate_file - parse and eval a given template file
+ * amaca_veval_file - parse and eval a given template file
  * @param filename Template filename
  * @param nargs The number of the following key-value pairs
  * @param args va_list of key-value pairs to pass to the template
  *
- * This function is equivalent to the function Amaca_template_file() except that
+ * This function is equivalent to the function amaca_eval_file() except that
  * it is called with a va_list instead of a variable number of arguments.
  *
  * Example:
  *
- *   char *result = Amaca_vtemplate_file("/path/to/file.tmpl", nargs, args);
+ *   char *result = amaca_veval_file("/path/to/file.tmpl", nargs, args);
  *
  */
 
-extern char *Amaca_vtemplate_file(const char *filename, int nargs, va_list args);
+extern char *amaca_veval_file(const char *filename, int nargs, va_list args);
