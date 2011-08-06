@@ -54,6 +54,9 @@ file for a (very simple) code example.
 
  * `libluajit` or `liblua`
 
+To properly build Amaca, using the bundled Makefile, the `pkg-config` utility is
+also recommended.
+
 ## BUILDING
 
 Amaca is distributed as source code. Install with:
