@@ -2,9 +2,9 @@
 # Copyright (C) 2011 Alessandro Ghedini <al3xbio@gmail.com>
 # This file is released under the BSD license, see the COPYING file
 
-LUA_TEST=$(shell pkg-config --exists luajit && echo 1)
+LUAJIT=$(shell pkg-config --exists luajit && echo "1" || echo "0")
 
-ifdef LUA_TEST
+ifeq ($(LUAJIT), 1)
 	LUA_PACKAGE=luajit
 else
 	LUA_PACKAGE=lua5.1
