@@ -34,7 +34,8 @@
  */
 
 /**
- * amaca_eval - parse and eval a given template string
+ * amaca_eval - parse and eval a given template string.
+ *
  * @param template Template string
  * @param nargs The number of the following key-value pairs
  * @param ... List of key-value pairs to pass to the template
@@ -57,7 +58,8 @@
 extern char *amaca_eval(const char *template, int nargs, ...);
 
 /**
- * amaca_eval_file - parse and eval a given template file
+ * amaca_eval_file - parse and eval a given template file.
+ *
  * @param filename Template filename
  * @param nargs The number of the following key-value pairs
  * @param ... List of key-value pairs to pass to the template
@@ -79,7 +81,8 @@ extern char *amaca_eval(const char *template, int nargs, ...);
 extern char *amaca_eval_file(const char *filename, int nargs, ...);
 
 /**
- * amaca_veval - parse and eval a given template string
+ * amaca_veval - parse and eval a given template string.
+ *
  * @param template Template string
  * @param nargs The number of the following key-value pairs
  * @param args va_list of key-value pairs to pass to the template
@@ -96,7 +99,8 @@ extern char *amaca_eval_file(const char *filename, int nargs, ...);
 extern char *amaca_veval(const char *template, int nargs, va_list args);
 
 /**
- * amaca_veval_file - parse and eval a given template file
+ * amaca_veval_file - parse and eval a given template file.
+ *
  * @param filename Template filename
  * @param nargs The number of the following key-value pairs
  * @param args va_list of key-value pairs to pass to the template
