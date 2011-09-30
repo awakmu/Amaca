@@ -19,6 +19,8 @@ LDFLAGS=-L. -Wl,-rpath,. $(LUA_LDFLAGS)
 
 DYLIB?=libamaca.so
 
+.PHONY: all example test check clean
+
 all: example check $(DYLIB)
 
 $(DYLIB): src/amaca.o
