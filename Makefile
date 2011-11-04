@@ -10,8 +10,8 @@ else
 	LUA_PACKAGE=lua5.1
 endif
 
-LUA_CFLAGS?=`pkg-config --cflags $(LUA_PACKAGE)`
-LUA_LDFLAGS?=`pkg-config --libs $(LUA_PACKAGE)`
+LUA_CFLAGS?=$(shell pkg-config --cflags $(LUA_PACKAGE))
+LUA_LDFLAGS?=$(shell pkg-config --libs $(LUA_PACKAGE))
 
 OPTI?=-O3
 CFLAGS=-Wall -pedantic $(OPTI) $(LUA_CFLAGS) -fPIC
