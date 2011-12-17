@@ -37,6 +37,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <sys/types.h>
+#include <unistd.h>
+#include <fcntl.h>
+
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
@@ -48,11 +52,14 @@
 
 char *amaca_eval(const char *template, int nargs, ...);
 char *amaca_eval_file(const char *filename, int nargs, ...);
+char *amaca_eval_fd(const int fd, int nargs, ...);
 
 char *amaca_veval(const char *template, int nargs, va_list args);
 char *amaca_veval_file(const char *filename, int nargs, va_list args);
+char *amaca_veval_fd(const int fd, int nargs, va_list args);
 
 static char *read_file(const char *filename);
+static char *read_fd(const int fd);
 static char *lua_exec(char *code, int nargs, va_list args);
 static char *eval_template(const char *template, int nargs, va_list args);
 static char *str_replace(char *orig, char *str, char *start, char *end);
@@ -88,6 +95,23 @@ char *amaca_eval_file(const char *filename,  int nargs, ...) {
 	return ret;
 }
 
+char *amaca_eval_fd(const int fd,  int nargs, ...) {
+	va_list args;
+	char *ret, *str = read_fd(fd);
+	check_value(str);
+
+	/* eval template with proper args */
+	va_start(args, nargs);
+	ret = eval_template(str, nargs, args);
+	va_end(args);
+
+	check_value(ret);
+
+	free(str);
+
+	return ret;
+}
+
 char *amaca_veval(const char *template,  int nargs, va_list args) {
 	char *ret;
 
@@ -101,6 +125,20 @@ char *amaca_veval(const char *template,  int nargs, va_list args) {
 char *amaca_veval_file(const char *filename,  int nargs, va_list args) {
 	char *ret;
 	char *str = read_file(filename);
+	check_value(str);
+
+	/* eval template with proper args */
+	ret = eval_template(str, nargs, args);
+	check_value(ret);
+
+	free(str);
+
+	return ret;
+}
+
+char *amaca_veval_fd(const int fd,  int nargs, va_list args) {
+	char *ret;
+	char *str = read_fd(fd);
 	check_value(str);
 
 	/* eval template with proper args */
@@ -149,22 +187,33 @@ static char *eval_template(const char *template, int nargs, va_list args) {
 
 static char *read_file(const char *filename) {
 	char *str;
+	int fd = open(filename, O_RDONLY);
+	check_value(fd > 0);
+
+	str = read_fd(fd);
+	close(fd);
+
+	return str;
+}
+
+static char *read_fd(const int fd) {
+	char *str;
 	size_t fd_size;
 
-	FILE *fd = fopen(filename, "rb");
-	check_value(fd);
+	FILE *file_d = fdopen(fd, "rb");
+	check_value(file_d);
 
 	/* read template file into memory */
-	fseek(fd, 0, SEEK_END);
-	fd_size = ftell(fd);
-	fseek(fd, 0, SEEK_SET);
+	fseek(file_d, 0, SEEK_END);
+	fd_size = ftell(file_d);
+	fseek(file_d, 0, SEEK_SET);
 
 	str = calloc(fd_size + 1, 1);
 	check_value(str);
 
-	fread(str, sizeof(char), fd_size, fd);
+	fread(str, sizeof(char), fd_size, file_d);
 
-	fclose(fd);
+	fclose(file_d);
 
 	return str;
 }
