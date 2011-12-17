@@ -48,8 +48,6 @@
 #define TMPL_START "{{"
 #define TMPL_END   "}}"
 
-#define check_value(x) assert(x);
-
 char *amaca_eval(const char *template, int nargs, ...);
 char *amaca_eval_file(const char *filename, int nargs, ...);
 char *amaca_eval_fd(const int fd, int nargs, ...);
@@ -73,7 +71,7 @@ char *amaca_eval(const char *template,  int nargs, ...) {
 	ret = eval_template(template, nargs, args);
 	va_end(args);
 
-	check_value(ret);
+	assert(ret);
 
 	return ret;
 }
@@ -81,14 +79,14 @@ char *amaca_eval(const char *template,  int nargs, ...) {
 char *amaca_eval_file(const char *filename,  int nargs, ...) {
 	va_list args;
 	char *ret, *str = read_file(filename);
-	check_value(str);
+	assert(str);
 
 	/* eval template with proper args */
 	va_start(args, nargs);
 	ret = eval_template(str, nargs, args);
 	va_end(args);
 
-	check_value(ret);
+	assert(ret);
 
 	free(str);
 
@@ -98,14 +96,14 @@ char *amaca_eval_file(const char *filename,  int nargs, ...) {
 char *amaca_eval_fd(const int fd,  int nargs, ...) {
 	va_list args;
 	char *ret, *str = read_fd(fd);
-	check_value(str);
+	assert(str);
 
 	/* eval template with proper args */
 	va_start(args, nargs);
 	ret = eval_template(str, nargs, args);
 	va_end(args);
 
-	check_value(ret);
+	assert(ret);
 
 	free(str);
 
@@ -117,7 +115,7 @@ char *amaca_veval(const char *template,  int nargs, va_list args) {
 
 	/* eval template with proper args */
 	ret = eval_template(template, nargs, args);
-	check_value(ret);
+	assert(ret);
 
 	return ret;
 }
@@ -125,11 +123,11 @@ char *amaca_veval(const char *template,  int nargs, va_list args) {
 char *amaca_veval_file(const char *filename,  int nargs, va_list args) {
 	char *ret;
 	char *str = read_file(filename);
-	check_value(str);
+	assert(str);
 
 	/* eval template with proper args */
 	ret = eval_template(str, nargs, args);
-	check_value(ret);
+	assert(ret);
 
 	free(str);
 
@@ -139,11 +137,11 @@ char *amaca_veval_file(const char *filename,  int nargs, va_list args) {
 char *amaca_veval_fd(const int fd,  int nargs, va_list args) {
 	char *ret;
 	char *str = read_fd(fd);
-	check_value(str);
+	assert(str);
 
 	/* eval template with proper args */
 	ret = eval_template(str, nargs, args);
-	check_value(ret);
+	assert(ret);
 
 	free(str);
 
@@ -153,7 +151,7 @@ char *amaca_veval_fd(const int fd,  int nargs, va_list args) {
 static char *eval_template(const char *template, int nargs, va_list args) {
 	char *start, *end;
 	char *index = calloc(strlen(template) + 1, 1);
-	check_value(index);
+	assert(index);
 
 	index = strcpy(index, template);
 
@@ -166,10 +164,10 @@ static char *eval_template(const char *template, int nargs, va_list args) {
 
 		block_len = (end - 2) - (start + 2);
 		block = calloc(block_len + 1, 1);
-		check_value(block);
+		assert(block);
 
 		block = memcpy(block, start + 2, block_len);
-		check_value(block);
+		assert(block);
 
 		tmpl = lua_exec(block, nargs, args);
 
@@ -188,7 +186,7 @@ static char *eval_template(const char *template, int nargs, va_list args) {
 static char *read_file(const char *filename) {
 	char *str;
 	int fd = open(filename, O_RDONLY);
-	check_value(fd > 0);
+	assert(fd > 0);
 
 	str = read_fd(fd);
 	close(fd);
@@ -201,7 +199,7 @@ static char *read_fd(const int fd) {
 	size_t fd_size;
 
 	FILE *file_d = fdopen(fd, "rb");
-	check_value(file_d);
+	assert(file_d);
 
 	/* read template file into memory */
 	fseek(file_d, 0, SEEK_END);
@@ -209,7 +207,7 @@ static char *read_fd(const int fd) {
 	fseek(file_d, 0, SEEK_SET);
 
 	str = calloc(fd_size + 1, 1);
-	check_value(str);
+	assert(str);
 
 	fread(str, sizeof(char), fd_size, file_d);
 
@@ -226,16 +224,16 @@ static char *str_replace(char *orig, char *str, char *start, char *end) {
 	size_t sub_len = end - start;
 
 	result = calloc((src_len - sub_len) + str_len + 1, 1);
-	check_value(result);
+	assert(result);
 
 	result = strncpy(result, orig, start - orig);
-	check_value(result);
+	assert(result);
 
 	result = strncat(result, str, str_len);
-	check_value(result);
+	assert(result);
 
 	result = strncat(result, end, (orig + src_len) - end);
-	check_value(result);
+	assert(result);
 
 	return result;
 }
@@ -280,7 +278,7 @@ static char *lua_exec(char *code, int nargs, va_list args) {
 
 	/* execute code block */
 	tmp = luaL_dostring(l, code);
-	check_value(tmp == 0);
+	assert(tmp == 0);
 
 	/* extract code block result */
 	tmpl = calloc(lua_strlen(l, -1) + 1, 1);
