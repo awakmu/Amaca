@@ -1,5 +1,5 @@
 /*
- * Template engine Lua-based in C
+ * Tiny template engine natively supporting Lua scripting
  *
  * Copyright (c) 2011, Alessandro Ghedini
  * All rights reserved.
