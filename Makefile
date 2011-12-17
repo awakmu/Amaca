@@ -44,4 +44,4 @@ eg/example_stdin.o: eg/example_stdin.c eg/../src/amaca.h
 test.o: test.c src/amaca.h
 
 clean:
-	$(RM) -rf example test eg/*.o src/*.o *.*o
+	$(RM) -rf example* test eg/*.o src/*.o *.*o
