@@ -21,13 +21,16 @@ DYLIB?=libamaca.so
 
 .PHONY: all example test check clean
 
-all: example check $(DYLIB)
+all: example example_stdin check $(DYLIB)
 
 $(DYLIB): src/amaca.o
 	$(CC) -shared -fPIC -o $(DYLIB) src/amaca.o $(CFLAGS) $(LDFLAGS)
 
 example: eg/example.o $(DYLIB)
 	$(CC) -o example eg/example.o $(CFLAGS) $(LDFLAGS) -lamaca
+
+example_stdin: eg/example_stdin.o $(DYLIB)
+	$(CC) -o example_stdin eg/example_stdin.o $(CFLAGS) $(LDFLAGS) -lamaca
 
 test: test.o $(DYLIB)
 	$(CC) -o test test.o $(CFLAGS) $(LDFLAGS) -lamaca
@@ -37,6 +40,7 @@ check: test
 
 src/amaca.o: src/amaca.c
 eg/example.o: eg/example.c eg/../src/amaca.h
+eg/example_stdin.o: eg/example_stdin.c eg/../src/amaca.h
 test.o: test.c src/amaca.h
 
 clean:
