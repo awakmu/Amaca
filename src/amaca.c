@@ -176,6 +176,7 @@ static char *eval_template(const char *template, int nargs, va_list args) {
 
 		free(index);
 		free(block);
+		free(tmpl);
 
 		index = nindex;
 	}
@@ -255,7 +256,6 @@ static char *lua_exec(char *code, int nargs, va_list args) {
 
 	for (i = 0; i < nargs; i++) {
 		char *key, *val;
-		char *key_c, *val_c;
 
 		key = va_arg(args_c, char *);
 		val = va_arg(args_c, char *);
@@ -264,14 +264,8 @@ static char *lua_exec(char *code, int nargs, va_list args) {
 			break;
 		}
 
-		key_c = calloc(strlen(key) + 1, 1);
-		key_c = strcpy(key_c, key);
-
-		val_c = calloc(strlen(val) + 1, 1);
-		val_c = strcpy(val_c, val);
-
-		lua_pushstring(l, val_c);
-		lua_setglobal(l, key_c);
+		lua_pushstring(l, val);
+		lua_setglobal(l, key);
 	}
 
 	va_end(args_c);

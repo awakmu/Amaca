@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include "../src/amaca.h"
@@ -15,5 +16,6 @@ int main() {
 
 	printf("%s", str);
 
+	free(str);
 	return 0;
 }
