@@ -19,7 +19,7 @@ LDFLAGS=-L. -Wl,-rpath,. $(LUA_LDFLAGS)
 
 DYLIB?=libamaca.so
 
-.PHONY: all test check clean
+.PHONY: all check clean
 
 all: example example_stdin check $(DYLIB)
 
