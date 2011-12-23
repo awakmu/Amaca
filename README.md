@@ -46,9 +46,16 @@ char *amaca_eval_file(const char *filename, int nargs, ...);
 It's the same as the previous function, but it takes as argument the path to a
 template file.
 
-The functions `amaca_veval()` and `amaca_veval_file()` are equivalent to
-the functions `amaca_eval()` and `amaca_eval_file()` respectively, except
-that they are called with a va_list instead of a variable number of arguments.
+~~~~ c
+char *amaca_eval_fd(const int fd, int nargs, ...);
+~~~~
+
+It's the same as the previous functions, but it takes as argument a file descriptor.
+
+The functions `amaca_veval()`, `amaca_veval_file()` and `amaca_veval_fd()` are
+equivalent to the functions `amaca_eval()`, `amaca_eval_file()` and
+`amaca_eval_fd()` respectively, except that they are called with a `va_list`
+instead of a variable number of arguments.
 
 The templates are just plain text strings or files containing blocks of Lua code.
 The code blocks have to be enclosed between `{{` and `}}`.

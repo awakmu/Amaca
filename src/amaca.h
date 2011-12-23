@@ -36,9 +36,9 @@
 /**
  * amaca_eval - parse and eval a given template string.
  *
- * @param template Template string
- * @param nargs The number of the following key-value pairs
- * @param ... List of key-value pairs to pass to the template
+ * @param template  Template string
+ * @param nargs     The number of the following key-value pairs
+ * @param ...       List of key-value pairs to pass to the template
  *
  * This function evals and evaluates the given template string, and returns
  * a pointer to the resulting string (returns NULL on failure). It also
@@ -60,9 +60,9 @@ extern char *amaca_eval(const char *template, int nargs, ...);
 /**
  * amaca_eval_file - parse and eval a given template file.
  *
- * @param filename Template filename
- * @param nargs The number of the following key-value pairs
- * @param ... List of key-value pairs to pass to the template
+ * @param filename  Template filename
+ * @param nargs     The number of the following key-value pairs
+ * @param ...       List of key-value pairs to pass to the template
  *
  * Just like amaca_eval() but takes as argument a template file instead
  * of a string. It also optionally takes a list of key-value pairs that are
@@ -83,9 +83,9 @@ extern char *amaca_eval_file(const char *filename, int nargs, ...);
 /**
  * amaca_eval_fd - parse and eval a given template file descriptor.
  *
- * @param fd Template file descriptor
- * @param nargs The number of the following key-value pairs
- * @param ... List of key-value pairs to pass to the template
+ * @param fd        Template file descriptor
+ * @param nargs     The number of the following key-value pairs
+ * @param ...       List of key-value pairs to pass to the template
  *
  * Just like amaca_eval_file() but takes as argument a template file descriptor
  * instead of a file name. It also optionally takes a list of key-value pairs
@@ -106,9 +106,9 @@ extern char *amaca_eval_fd(const int fd, int nargs, ...);
 /**
  * amaca_veval - parse and eval a given template string.
  *
- * @param template Template string
- * @param nargs The number of the following key-value pairs
- * @param args va_list of key-value pairs to pass to the template
+ * @param template  Template string
+ * @param nargs     The number of the following key-value pairs
+ * @param args      va_list of key-value pairs to pass to the template
  *
  * This function is equivalent to the function amaca_eval() except that
  * it is called with a va_list instead of a variable number of arguments.
@@ -124,9 +124,9 @@ extern char *amaca_veval(const char *template, int nargs, va_list args);
 /**
  * amaca_veval_file - parse and eval a given template file.
  *
- * @param filename Template filename
- * @param nargs The number of the following key-value pairs
- * @param args va_list of key-value pairs to pass to the template
+ * @param filename  Template filename
+ * @param nargs     The number of the following key-value pairs
+ * @param args      va_list of key-value pairs to pass to the template
  *
  * This function is equivalent to the function amaca_eval_file() except that
  * it is called with a va_list instead of a variable number of arguments.
@@ -140,11 +140,11 @@ extern char *amaca_veval(const char *template, int nargs, va_list args);
 extern char *amaca_veval_file(const char *filename, int nargs, va_list args);
 
 /**
- * amaca_veval_file - parse and eval a given template file.
+ * amaca_veval_fd - parse and eval a given template file descriptor.
  *
- * @param filename Template filename
- * @param nargs The number of the following key-value pairs
- * @param args va_list of key-value pairs to pass to the template
+ * @param fd        Template file descriptor
+ * @param nargs     The number of the following key-value pairs
+ * @param args      va_list of key-value pairs to pass to the template
  *
  * This function is equivalent to the function amaca_eval_fd() except that
  * it is called with a va_list instead of a variable number of arguments.
