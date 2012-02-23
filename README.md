@@ -73,7 +73,6 @@ also recommended.
 Amaca is distributed as source code. Install with:
 
 ~~~~
-$ git clone git://github.com/AlexBio/Amaca.git && cd Amaca
 $ make
 ~~~~
 
