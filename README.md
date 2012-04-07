@@ -25,41 +25,7 @@ int main() {
 }
 ~~~~
 
-## OVERVIEW
-
-Amaca consists of the following functions:
-
-~~~~ c
-char *amaca_eval(const char *template, int argc, ...);
-~~~~
-
-Which takes as argument a template string and a list of key-value pairs to pass
-to the template code, which will be available within the Lua scripts. `argc`
-represents the number of key-value pairs passed to the function.
-
-~~~~ c
-char *amaca_eval_file(const char *filename, int argc, ...);
-~~~~
-
-It's the same as the previous function, but it takes as argument the path to a
-template file.
-
-~~~~ c
-char *amaca_eval_fd(const int fd, int argc, ...);
-~~~~
-
-It's the same as the previous functions, but it takes as argument a file descriptor.
-
-The functions `amaca_veval()`, `amaca_veval_file()` and `amaca_veval_fd()` are
-equivalent to the functions `amaca_eval()`, `amaca_eval_file()` and
-`amaca_eval_fd()` respectively, except that they are called with a `va_list`
-instead of a variable number of arguments.
-
-The templates are just plain text strings or files containing blocks of Lua code.
-The code blocks have to be enclosed between `{{` and `}}`.
-
-See the `eg/example.tmpl` file for a template example, and the `eg/example.c`
-file for a (very simple) code example.
+See the [documentation](http://alexbio.github.com/Amaca) for more information.
 
 ## DEPENDENCIES
 
