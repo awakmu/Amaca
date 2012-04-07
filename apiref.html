@@ -1,0 +1,187 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Api Reference &mdash; Amaca 0.7 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.7',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Amaca 0.7 documentation" href="index.html" />
+    <link rel="prev" title="Amaca’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Amaca’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Amaca 0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="api-reference">
+<span id="apiref"></span><h1>Api Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="intro">
+<h2>Intro<a class="headerlink" href="#intro" title="Permalink to this headline">¶</a></h2>
+<p>The file <tt class="file docutils literal"><span class="pre">amaca.h</span></tt> is used to include all the functions and data types
+declarations. It&#8217;s enough to:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="cp">#include &lt;amaca.h&gt;</span>
+</pre></div>
+</div>
+<p>in each source file to start using Tofu. All the functions are prefixed by
+<tt class="docutils literal"><span class="pre">amaca_</span></tt>.</p>
+<p>The templates are just plain text strings or files containing blocks of Lua
+code. The code blocks have to be enclosed between <tt class="docutils literal"><span class="pre">{{</span></tt> and <tt class="docutils literal"><span class="pre">}}</span></tt>.</p>
+</div>
+<div class="section" id="string">
+<span id="id1"></span><h2>String<a class="headerlink" href="#string" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt>
+<tt class="descname">char *amaca_eval(const char *template, int argc, ...);</tt></dt>
+<dd><p>Evaluate the given template string, passing to it the following <cite>argc</cite>
+key-value pairs.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 0.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<tt class="descname">char *amaca_veval(const char *template, int argc, va_list args);</tt></dt>
+<dd><p>Equivalent to <cite>amaca_eval</cite> except that it is called with a <cite>va_list</cite> instead
+of a variable number of arguments.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 0.5.</span></p>
+</dd></dl>
+
+</div>
+<div class="section" id="file">
+<span id="id2"></span><h2>File<a class="headerlink" href="#file" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt>
+<tt class="descname">char *amaca_eval_file(const char *filename, int argc, ...);</tt></dt>
+<dd><p>Evaluate the given template file, passing to it the following <cite>argc</cite>
+key-value pairs.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 0.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<tt class="descname">char *amaca_veval_file(const char *filename, int argc, va_list args);</tt></dt>
+<dd><p>Equivalent to <cite>amaca_eval_file</cite> except that it is called with a <cite>va_list</cite>
+instead of a variable number of arguments.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 0.5.</span></p>
+</dd></dl>
+
+</div>
+<div class="section" id="file-descriptor">
+<span id="fd"></span><h2>File descriptor<a class="headerlink" href="#file-descriptor" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt>
+<tt class="descname">char *amaca_eval_fd(const int fd, int argc, ...);</tt></dt>
+<dd><p>Evaluate the given template file descriptor, passing to it the following
+<cite>argc</cite> key-value pairs.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 0.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<tt class="descname">char *amaca_veval_fd(const int fd, int argc, va_list args);</tt></dt>
+<dd><p>Equivalent to <cite>amaca_eval_fd</cite> except that it is called with a <cite>va_list</cite>
+instead of a variable number of arguments.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 0.6.</span></p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Api Reference</a><ul>
+<li><a class="reference internal" href="#intro">Intro</a></li>
+<li><a class="reference internal" href="#string">String</a></li>
+<li><a class="reference internal" href="#file">File</a></li>
+<li><a class="reference internal" href="#file-descriptor">File descriptor</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Amaca&#8217;s documentation!</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/apiref.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Amaca’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">Amaca 0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Alessandro Ghedini.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
