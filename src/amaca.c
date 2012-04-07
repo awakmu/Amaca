@@ -48,27 +48,27 @@
 #define TMPL_START "{{"
 #define TMPL_END   "}}"
 
-char *amaca_eval(const char *template, int nargs, ...);
-char *amaca_eval_file(const char *filename, int nargs, ...);
-char *amaca_eval_fd(const int fd, int nargs, ...);
+char *amaca_eval(const char *template, int argc, ...);
+char *amaca_eval_file(const char *filename, int argc, ...);
+char *amaca_eval_fd(const int fd, int argc, ...);
 
-char *amaca_veval(const char *template, int nargs, va_list args);
-char *amaca_veval_file(const char *filename, int nargs, va_list args);
-char *amaca_veval_fd(const int fd, int nargs, va_list args);
+char *amaca_veval(const char *template, int argc, va_list args);
+char *amaca_veval_file(const char *filename, int argc, va_list args);
+char *amaca_veval_fd(const int fd, int argc, va_list args);
 
 static char *read_file(const char *filename);
 static char *read_fd(const int fd);
-static char *lua_exec(char *code, int nargs, va_list args);
-static char *eval_template(const char *template, int nargs, va_list args);
+static char *lua_exec(char *code, int argc, va_list args);
+static char *eval_template(const char *template, int argc, va_list args);
 static char *str_replace(char *orig, char *str, char *start, char *end);
 
-char *amaca_eval(const char *template,  int nargs, ...) {
+char *amaca_eval(const char *template,  int argc, ...) {
 	char *ret;
 	va_list args;
 
 	/* eval template with proper args */
-	va_start(args, nargs);
-	ret = eval_template(template, nargs, args);
+	va_start(args, argc);
+	ret = eval_template(template, argc, args);
 	va_end(args);
 
 	assert(ret);
@@ -76,14 +76,14 @@ char *amaca_eval(const char *template,  int nargs, ...) {
 	return ret;
 }
 
-char *amaca_eval_file(const char *filename,  int nargs, ...) {
+char *amaca_eval_file(const char *filename,  int argc, ...) {
 	va_list args;
 	char *ret, *str = read_file(filename);
 	assert(str);
 
 	/* eval template with proper args */
-	va_start(args, nargs);
-	ret = eval_template(str, nargs, args);
+	va_start(args, argc);
+	ret = eval_template(str, argc, args);
 	va_end(args);
 
 	assert(ret);
@@ -93,14 +93,14 @@ char *amaca_eval_file(const char *filename,  int nargs, ...) {
 	return ret;
 }
 
-char *amaca_eval_fd(const int fd,  int nargs, ...) {
+char *amaca_eval_fd(const int fd,  int argc, ...) {
 	va_list args;
 	char *ret, *str = read_fd(fd);
 	assert(str);
 
 	/* eval template with proper args */
-	va_start(args, nargs);
-	ret = eval_template(str, nargs, args);
+	va_start(args, argc);
+	ret = eval_template(str, argc, args);
 	va_end(args);
 
 	assert(ret);
@@ -110,23 +110,23 @@ char *amaca_eval_fd(const int fd,  int nargs, ...) {
 	return ret;
 }
 
-char *amaca_veval(const char *template,  int nargs, va_list args) {
+char *amaca_veval(const char *template,  int argc, va_list args) {
 	char *ret;
 
 	/* eval template with proper args */
-	ret = eval_template(template, nargs, args);
+	ret = eval_template(template, argc, args);
 	assert(ret);
 
 	return ret;
 }
 
-char *amaca_veval_file(const char *filename,  int nargs, va_list args) {
+char *amaca_veval_file(const char *filename,  int argc, va_list args) {
 	char *ret;
 	char *str = read_file(filename);
 	assert(str);
 
 	/* eval template with proper args */
-	ret = eval_template(str, nargs, args);
+	ret = eval_template(str, argc, args);
 	assert(ret);
 
 	free(str);
@@ -134,13 +134,13 @@ char *amaca_veval_file(const char *filename,  int nargs, va_list args) {
 	return ret;
 }
 
-char *amaca_veval_fd(const int fd,  int nargs, va_list args) {
+char *amaca_veval_fd(const int fd,  int argc, va_list args) {
 	char *ret;
 	char *str = read_fd(fd);
 	assert(str);
 
 	/* eval template with proper args */
-	ret = eval_template(str, nargs, args);
+	ret = eval_template(str, argc, args);
 	assert(ret);
 
 	free(str);
@@ -148,7 +148,7 @@ char *amaca_veval_fd(const int fd,  int nargs, va_list args) {
 	return ret;
 }
 
-static char *eval_template(const char *template, int nargs, va_list args) {
+static char *eval_template(const char *template, int argc, va_list args) {
 	char *start, *end;
 	char *index = calloc(strlen(template) + 1, 1);
 	assert(index);
@@ -169,7 +169,7 @@ static char *eval_template(const char *template, int nargs, va_list args) {
 		block = memcpy(block, start + 2, block_len);
 		assert(block);
 
-		tmpl = lua_exec(block, nargs, args);
+		tmpl = lua_exec(block, argc, args);
 
 		/* replace code block with its output */
 		nindex = str_replace(index, tmpl, start, end);
@@ -239,7 +239,7 @@ static char *str_replace(char *orig, char *str, char *start, char *end) {
 	return result;
 }
 
-static char *lua_exec(char *code, int nargs, va_list args) {
+static char *lua_exec(char *code, int argc, va_list args) {
 	int tmp, i;
 	char *tmpl;
 	va_list args_c;
@@ -254,7 +254,7 @@ static char *lua_exec(char *code, int nargs, va_list args) {
 	 */
 	va_copy(args_c, args);
 
-	for (i = 0; i < nargs; i++) {
+	for (i = 0; i < argc; i++) {
 		char *key, *val;
 
 		key = va_arg(args_c, char *);

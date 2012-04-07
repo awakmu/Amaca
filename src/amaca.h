@@ -37,7 +37,7 @@
  * amaca_eval - parse and eval a given template string.
  *
  * @param template  Template string
- * @param nargs     The number of the following key-value pairs
+ * @param argc     The number of the following key-value pairs
  * @param ...       List of key-value pairs to pass to the template
  *
  * This function evals and evaluates the given template string, and returns
@@ -55,13 +55,13 @@
  *
  */
 
-extern char *amaca_eval(const char *template, int nargs, ...);
+extern char *amaca_eval(const char *template, int argc, ...);
 
 /**
  * amaca_eval_file - parse and eval a given template file.
  *
  * @param filename  Template filename
- * @param nargs     The number of the following key-value pairs
+ * @param argc     The number of the following key-value pairs
  * @param ...       List of key-value pairs to pass to the template
  *
  * Just like amaca_eval() but takes as argument a template file instead
@@ -78,13 +78,13 @@ extern char *amaca_eval(const char *template, int nargs, ...);
  *
  */
 
-extern char *amaca_eval_file(const char *filename, int nargs, ...);
+extern char *amaca_eval_file(const char *filename, int argc, ...);
 
 /**
  * amaca_eval_fd - parse and eval a given template file descriptor.
  *
  * @param fd        Template file descriptor
- * @param nargs     The number of the following key-value pairs
+ * @param argc     The number of the following key-value pairs
  * @param ...       List of key-value pairs to pass to the template
  *
  * Just like amaca_eval_file() but takes as argument a template file descriptor
@@ -101,13 +101,13 @@ extern char *amaca_eval_file(const char *filename, int nargs, ...);
  *
  */
 
-extern char *amaca_eval_fd(const int fd, int nargs, ...);
+extern char *amaca_eval_fd(const int fd, int argc, ...);
 
 /**
  * amaca_veval - parse and eval a given template string.
  *
  * @param template  Template string
- * @param nargs     The number of the following key-value pairs
+ * @param argc     The number of the following key-value pairs
  * @param args      va_list of key-value pairs to pass to the template
  *
  * This function is equivalent to the function amaca_eval() except that
@@ -115,17 +115,17 @@ extern char *amaca_eval_fd(const int fd, int nargs, ...);
  *
  * Example:
  *
- *   char *result = amaca_veval(template_string, nargs, args);
+ *   char *result = amaca_veval(template_string, argc, args);
  *
  */
 
-extern char *amaca_veval(const char *template, int nargs, va_list args);
+extern char *amaca_veval(const char *template, int argc, va_list args);
 
 /**
  * amaca_veval_file - parse and eval a given template file.
  *
  * @param filename  Template filename
- * @param nargs     The number of the following key-value pairs
+ * @param argc     The number of the following key-value pairs
  * @param args      va_list of key-value pairs to pass to the template
  *
  * This function is equivalent to the function amaca_eval_file() except that
@@ -133,17 +133,17 @@ extern char *amaca_veval(const char *template, int nargs, va_list args);
  *
  * Example:
  *
- *   char *result = amaca_veval_file("/path/to/file.tmpl", nargs, args);
+ *   char *result = amaca_veval_file("/path/to/file.tmpl", argc, args);
  *
  */
 
-extern char *amaca_veval_file(const char *filename, int nargs, va_list args);
+extern char *amaca_veval_file(const char *filename, int argc, va_list args);
 
 /**
  * amaca_veval_fd - parse and eval a given template file descriptor.
  *
  * @param fd        Template file descriptor
- * @param nargs     The number of the following key-value pairs
+ * @param argc     The number of the following key-value pairs
  * @param args      va_list of key-value pairs to pass to the template
  *
  * This function is equivalent to the function amaca_eval_fd() except that
@@ -151,8 +151,8 @@ extern char *amaca_veval_file(const char *filename, int nargs, va_list args);
  *
  * Example:
  *
- *   char *result = amaca_veval_fd(STDIN_FILENO, nargs, args);
+ *   char *result = amaca_veval_fd(STDIN_FILENO, argc, args);
  *
  */
 
-extern char *amaca_veval_fd(const int fd, int nargs, va_list args);
+extern char *amaca_veval_fd(const int fd, int argc, va_list args);

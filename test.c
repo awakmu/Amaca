@@ -78,7 +78,7 @@ void test_eval_fd() {
 	close(fd);
 }
 
-void test_veval_simple_helper(const char *template, int nargs, va_list args) {
+void test_veval_simple_helper(const char *template, int argc, va_list args) {
 	char *result;
 
 	test_diag("Test vtemplate simple");
@@ -87,16 +87,16 @@ void test_veval_simple_helper(const char *template, int nargs, va_list args) {
 	free(result);
 }
 
-void test_veval_simple(int nargs, ...) {
+void test_veval_simple(int argc, ...) {
 	va_list args;
 	char *tmpl = "This is the {{ return arg1 .. arg2 }} test";
 
-	va_start(args, nargs);
-	test_veval_simple_helper(tmpl, nargs, args);
+	va_start(args, argc);
+	test_veval_simple_helper(tmpl, argc, args);
 	va_end(args);
 }
 
-void test_veval_file_helper(const char *template, int nargs, va_list args) {
+void test_veval_file_helper(const char *template, int argc, va_list args) {
 	char *result;
 
 	test_diag("Test vtemplate file");
@@ -105,15 +105,15 @@ void test_veval_file_helper(const char *template, int nargs, va_list args) {
 	free(result);
 }
 
-void test_veval_file(int nargs, ...) {
+void test_veval_file(int argc, ...) {
 	va_list args;
 
-	va_start(args, nargs);
-	test_veval_file_helper("eg/example.tmpl", nargs, args);
+	va_start(args, argc);
+	test_veval_file_helper("eg/example.tmpl", argc, args);
 	va_end(args);
 }
 
-void test_veval_fd_helper(const int fd, int nargs, va_list args) {
+void test_veval_fd_helper(const int fd, int argc, va_list args) {
 	char *result;
 
 	test_diag("Test vtemplate fd");
@@ -122,12 +122,12 @@ void test_veval_fd_helper(const int fd, int nargs, va_list args) {
 	free(result);
 }
 
-void test_veval_fd(int nargs, ...) {
+void test_veval_fd(int argc, ...) {
 	va_list args;
 	int fd = open("eg/example.tmpl", O_RDONLY);
 
-	va_start(args, nargs);
-	test_veval_fd_helper(fd, nargs, args);
+	va_start(args, argc);
+	test_veval_fd_helper(fd, argc, args);
 	va_end(args);
 
 	close(fd);
