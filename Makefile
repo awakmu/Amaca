@@ -19,7 +19,7 @@ LDFLAGS=-L. -Wl,-rpath,. $(LUA_LDFLAGS)
 
 DYLIB?=libamaca.so
 
-.PHONY: all check clean
+.PHONY: all check html clean
 
 all: example example_stdin check $(DYLIB)
 
@@ -38,10 +38,13 @@ test: test.o $(DYLIB)
 check: test
 	./test
 
+html:
+	sphinx-build -b html docs docs/_build/html
+
 src/amaca.o: src/amaca.c
 eg/example.o: eg/example.c eg/../src/amaca.h
 eg/example_stdin.o: eg/example_stdin.c eg/../src/amaca.h
 test.o: test.c src/amaca.h
 
 clean:
-	$(RM) -rf example* test eg/*.o src/*.o *.*o
+	$(RM) -rf example* test eg/*.o src/*.o *.*o docs/_build
