@@ -1,6 +1,8 @@
 Amaca
 =====
 
+![Travis CI](https://secure.travis-ci.org/AlexBio/Amaca.png)
+
 Amaca (pronounced: amàca) is a tiny template engine written in C, which natively
 supports Lua scripting. This means that you can create your templates without
 having to learn yet another templating language. You'll need just a minimal
