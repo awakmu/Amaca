@@ -1,0 +1,14 @@
+language: perl
+
+install:
+ - sudo apt-get install liblua5.1-0-dev
+
+script:
+ - make check
+
+notifications:
+  recipient:
+   - al3xbio@gmail.com
+  email:
+    on_success: change
+    on_failure: always
